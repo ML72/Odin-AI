@@ -11,6 +11,8 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
 });
 
+//Embeddings
+
 async function getEmbedding(keyword: string) {
     try {
       const embedding = await openai.embeddings.create({
@@ -45,6 +47,8 @@ async function combineKeywords(k1: string, k2: string) {
 // console.log(await combineKeywords('color', 'colour'));
 // console.log(await combineKeywords('Taxation with no representation', 'Taxation without representation'));
 
+//Graph combinations
+
 const g1_nodes  = [
     new N("Taxation Without Representation", "", 0),
     new N("Sugar Act", "", 0),
@@ -58,36 +62,47 @@ const g2_nodes = [
     new N("Declaration of Independence", "", 0)
 ]
 
-// const g1_adj_matrix = [
+const g1_edges = [
+    new Edge("Led to grievances from colonists", 0, g1_nodes[0], g1_nodes[1]),
+    new Edge("Led to grievances from colonists", 0, g1_nodes[0], g1_nodes[2]),
+]
 
-// ]
+const g2_edges = [
+    new Edge("They lost in this battle", 0, g1_nodes[0], g1_nodes[1]),
+    new Edge("Root cause of conflict", 0, g1_nodes[2], g1_nodes[1]),
+    new Edge("Explicitly addressed in document", 0, g1_nodes[1], g1_nodes[3]),
+]
 
-// async function constructSharedGraph(g1: Graph, g2: Graph) {
-//     for (const node of g1.nodes) {
-//         for (const node2 of g2.nodes) {
+const g1 = new Graph(g1_nodes, g1_edges);
+const g2 = new Graph(g2_nodes, g2_edges);
 
-//         }
-//     }
-// }
+async function constructSharedGraph(g1: Graph, g2: Graph) {
+    const shared_nodes = [];
+    const g3_edges = [];
 
-// const g1_adj_matrix = [
-//     [[], [{"weight": 3, "edge_description": "Led to grievances from colonists"}], [{"weight": 4, "edge_description": "Fueled opposition"}], [{"weight": 5, "edge_description": "Increased tensions"}]],
-//     [[{"weight": 3, "edge_description": "Aimed at raising revenue"}], [], [{"weight": 2, "edge_description": "Preceded and influenced"}], []],
-//     [[{"weight": 4, "edge_description": "Imposed direct taxes"}], [{"weight": 2, "edge_description": "Early act before Stamp Act"}], [], [{"weight": 3, "edge_description": "Contributed to the Boston Tea Party"}]],
-//     [[{"weight": 5, "edge_description": "Colonial resistance escalated"}], [], [{"weight": 3, "edge_description": "Response to economic control"}], []]
-// ]
+    for (const node of g1.nodes) {
+        for (const node2 of g2.nodes) {
+            if (await combineKeywords(node.title, node2.title)) {
+                shared_nodes.push(new N(node.title, "", 0));
+
+                for (const edge of g1.edges) {
+                    if (edge.from === node) {
+                        g3_edges.push(new Edge(edge.connection, edge.weight, edge.from, edge.to));
+                    }
+                }
+
+                for (const edge of g2.edges) {
+                    if (edge.from === node2) {
+                        g3_edges.push(new Edge(edge.connection, edge.weight, edge.from, edge.to));
+                    }
+                }
+            }
+        }
+    }
 
 
-// const g2_adj_matrix = [
-//     [[], [{"weight": 6, "edge_description": "Opposed by the colonies"}], [{"weight": 4, "edge_description": "Colonial complaint"}], []],
-//     [[{"weight": 6, "edge_description": "Fought against Great Britain"}], [], [{"weight": 5, "edge_description": "A major cause of the war"}], [{"weight": 7, "edge_description": "Resulted in a new nation"}]],
-//     [[{"weight": 4, "edge_description": "Root cause of conflict"}], [{"weight": 5, "edge_description": "Fueled revolutionary sentiment"}], [], [{"weight": 6, "edge_description": "Explicitly addressed in document"}]],
-//     [[], [{"weight": 7, "edge_description": "Formalized independence"}], [{"weight": 6, "edge_description": "Declared principles against unfair taxation"}], []]    
-// ]
+    const g3 = new Graph(shared_nodes, g3_edges);
+    return g3;
+}
 
-// async function combineGraphs() {
-
-
-// }
-
-export default combineKeywords;
+constructSharedGraph(g1, g2);

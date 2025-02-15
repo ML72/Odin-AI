@@ -18,7 +18,7 @@ to-do graph wise:
 - combine two graphs
 - verify gpt output: every node must occur in the document
 - node "size": tf idf
-- address 'spelling mistakes' 
+- address 'spelling mistakes' - kinda done by gpt alr
 
 end goal of graph:
 

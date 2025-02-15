@@ -1,3 +1,5 @@
+let idCounter = 0;
+
 export class N {
     title: string;
     body: string
@@ -14,24 +16,32 @@ export class N {
 
 export class Edge {
     connection: string;
-    node_from: N;
-    node_to: N;
+    from: N;
+    to: N;
     weight: number;
+    graph_id: number;
 
-    constructor(title: string, weight: number, node_from: N, node_to: N) {
+    constructor(title: string, weight: number, from: N, to: N) {
         this.connection = title;
         this.weight = weight;
-        this.node_from = node_from;
-        this.node_to = node_to;
+        this.from = from;
+        this.to = to;
+        this.graph_id = 0;
     }
 }
 
 export class Graph {
     nodes: N[]
-    edgeList: Edge[];
+    edges: Edge[];
+    id: number;
 
     constructor(nodes: N[], edgeList: Edge[]) {
         this.nodes = nodes;
-        this.edgeList = edgeList;
+        this.edges = edgeList;
+        this.id = idCounter;
+        for (let edge of this.edges) {
+            edge.graph_id = idCounter;
+        }
+        idCounter ++;
     }
 }
