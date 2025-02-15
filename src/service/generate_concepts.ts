@@ -15,10 +15,12 @@ to-do graph wise:
 - manual node gen through stripping markdown for relevant pieces
 - change prompting for unidirectional edges
 - edge weighting algorithm given document
-- combine two graphs
 - verify gpt output: every node must occur in the document
 - node "size": tf idf
+
+- combine two graphs
 - address 'spelling mistakes' - kinda done by gpt alr
+
 
 end goal of graph:
 
@@ -34,6 +36,11 @@ node: {title ..}
 edges: [node][node] -- item is weight
 */
 
+// async function markdown_parse(markdown_text: string) {
+
+// }
+
+//named entities mention?
 export const generate_concepts = async (
     markdown_text: string,
 ) => {
@@ -55,24 +62,25 @@ export const generate_concepts = async (
     return concept_list.choices[0].message.content;
 };
 
+const markdown_file = `
+# The American Revolution (1775-1783)
+
+## Introduction
+The American Revolution was a political and military struggle between the thirteen American colonies and Great Britain. It resulted in the establishment of the United States of America as an independent nation. The conflict was fueled by grievances over taxation, lack of representation, and British control over colonial affairs.
+
+## Causes of the Revolution
+
+### 1. Taxation Without Representation
+The British government imposed several taxes on the American colonies without granting them representation in Parliament. Notable examples include:
+- **The Sugar Act (1764):** Imposed taxes on sugar and molasses.
+- **The Stamp Act (1765):** Required colonists to pay a tax on printed materials.
+- **The Tea Act (1773):** Allowed the British East India Company to sell tea directly to the colonies, leading to the Boston Tea Party.
+
+### 2. Growing Colonial Resistance
+Colonists formed groups such as the **Sons of Liberty** to protest British policies. The Boston Massacre (1770) and the Boston Tea Party (1773) were key events that heightened tensions.
+`
+
+generate_concepts(markdown_file);
+
+
 export default generate_concepts;
-
-// const markdown_file = `
-// # The American Revolution (1775-1783)
-
-// ## Introduction
-// The American Revolution was a political and military struggle between the thirteen American colonies and Great Britain. It resulted in the establishment of the United States of America as an independent nation. The conflict was fueled by grievances over taxation, lack of representation, and British control over colonial affairs.
-
-// ## Causes of the Revolution
-
-// ### 1. Taxation Without Representation
-// The British government imposed several taxes on the American colonies without granting them representation in Parliament. Notable examples include:
-// - **The Sugar Act (1764):** Imposed taxes on sugar and molasses.
-// - **The Stamp Act (1765):** Required colonists to pay a tax on printed materials.
-// - **The Tea Act (1773):** Allowed the British East India Company to sell tea directly to the colonies, leading to the Boston Tea Party.
-
-// ### 2. Growing Colonial Resistance
-// Colonists formed groups such as the **Sons of Liberty** to protest British policies. The Boston Massacre (1770) and the Boston Tea Party (1773) were key events that heightened tensions.
-// `
-
-// generate_concepts(markdown_file);
