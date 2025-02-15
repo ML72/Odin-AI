@@ -10,7 +10,7 @@ const Upload: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [selectedUserPdfFile, setSelectedUserPdfFile] = useState<File | null>(null);
-  const [selectedMp4File, setSelectedMp4File] = useState<File | null>(null);
+  const [selectedMp3File, setSelectedMp3File] = useState<File | null>(null);
 
   const alertHandler = () => {
     setNewAlert(dispatch, { msg: "Hello world!" });
@@ -41,16 +41,16 @@ const Upload: React.FC = () => {
     }
   }
 
-  const handleMp4FileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMp3FileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file && file.type === 'video/mp4') { // Corrected MIME type check
-      setSelectedMp4File(file);
-      console.log("MP4 file selected:", file);
-      // ... (Optional:  You might want to do something with the video file here)
+    if (file && file.type === 'audio/mpeg') { // Corrected MIME type check
+      setSelectedMp3File(file);
+      console.log("MP3 file selected:", file);
+      // ... (Optional:  You might want to do something with the audio file here)
     } else {
-      setSelectedMp4File(null);
-      console.error("Invalid file type. Please upload an MP4.");
-       setNewAlert(dispatch, { msg: "Invalid file type. Please upload an MP4.", alertType: "error" });
+      setSelectedMp3File(null);
+      console.error("Invalid file type. Please upload an MP3.");
+       setNewAlert(dispatch, { msg: "Invalid file type. Please upload an MP3.", alertType: "error" });
     }
   }
   
@@ -111,18 +111,18 @@ const Upload: React.FC = () => {
           <Grid item xs={6} sm={4}>
             <input
               type="file"
-              id="mp4-upload" // Unique ID for MP4 input
-              accept=".mp4" // or "video/mp4" (both should work)
+              id="mp3-upload" // Unique ID for MP3 input
+              accept=".mp3" // or "audio/mpeg" (both should work)
               style={{ display: 'none' }}
-              onChange={handleMp4FileUpload}
+              onChange={handleMp3FileUpload}
             />
             <Button
               variant="contained"
               color="primary"
               fullWidth
-              onClick={() => document.getElementById('mp4-upload')?.click()}
+              onClick={() => document.getElementById('mp3-upload')?.click()}
             >
-              {selectedMp4File ? selectedMp4File.name : "Upload Video (.mp4)"}
+              {selectedMp3File ? selectedMp3File.name : "Upload Audio (.mp3)"}
             </Button>
           </Grid>
         </Grid>
