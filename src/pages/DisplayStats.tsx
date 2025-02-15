@@ -17,7 +17,7 @@ const DisplayStats: React.FC = () => {
       <Typography align="center" variant="body1" sx={{ mt: 3, mx: 2 }}>
         This is the display stats page.
       </Typography>
-      <Container sx={{ mt: 3 }}>
+      <Container sx={{ my: 3 }}>
         <Button variant="contained" fullWidth onClick={alertHandler}>
           Click me!
         </Button>

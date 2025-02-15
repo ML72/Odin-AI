@@ -1,15 +1,14 @@
 import React from 'react';
 import { Button, Container, Typography } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router';
 
 import CustomPage from '../components/CustomPage';
-import { setNewAlert } from '../service/alert';
 
 const Home: React.FC = () => {
-  const dispatch = useDispatch();
-
-  const alertHandler = () => {
-    setNewAlert(dispatch, { msg: "Hello world!" });
+  const history = useHistory();
+  
+  const clickUpload = () => {
+      history.push('/upload');
   }
   
   return (
@@ -17,9 +16,9 @@ const Home: React.FC = () => {
       <Typography align="center" variant="body1" sx={{ mt: 3, mx: 2 }}>
         This is the home page.
       </Typography>
-      <Container sx={{ mt: 3 }}>
-        <Button variant="contained" fullWidth onClick={alertHandler}>
-          Click me!
+      <Container sx={{ my: 3 }}>
+        <Button variant="contained" fullWidth onClick={clickUpload}>
+          Upload
         </Button>
       </Container>
     </CustomPage>
