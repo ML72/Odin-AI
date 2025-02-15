@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import CustomPage from '../components/CustomPage';
 import { setNewAlert } from '../service/alert';
 
-const Landing: React.FC = () => {
+const Home: React.FC = () => {
   const dispatch = useDispatch();
 
   const alertHandler = () => {
@@ -15,7 +15,7 @@ const Landing: React.FC = () => {
   return (
     <CustomPage>
       <Typography align="center" variant="body1" sx={{ mt: 3, mx: 2 }}>
-        This is boilerplate code placed here for your convenience. Please modify for your own use.
+        This is the home page.
       </Typography>
       <Container sx={{ mt: 3 }}>
         <Button variant="contained" fullWidth onClick={alertHandler}>
@@ -26,4 +26,4 @@ const Landing: React.FC = () => {
   )
 };
 
-export default Landing;
+export default Home;

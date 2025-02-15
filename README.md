@@ -1,4 +1,4 @@
-# Template Code
+# OdinX AI
 
 This is boilerplate code for a cross-platform mobile application using the following frameworks:
 - **React** for user interface
