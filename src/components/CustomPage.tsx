@@ -13,11 +13,23 @@ const CustomPage: React.FC<ComponentProps> = ({ children = [] }: ComponentProps)
   const theme: any = createTheme({
     palette: {
       primary: {
-        main: "#ae41e0",
+        main: "#9674FF",
+      },
+      secondary: {
+        main: "#BBD0FF",
       }
     },
     shape: {
       borderRadius: 5,
+    },
+    components: {
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            textTransform: 'none', // Set all button text to lowercase
+          },
+        },
+      },
     }
   });
 
