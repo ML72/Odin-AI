@@ -37,8 +37,8 @@ async function cosineSimilarity(k1: number[], k2: number[]) {
 }
 
 async function combineKeywords(k1: string, k2: string) {
-    const embedding1 = await getEmbedding(k1);
-    const embedding2 = await getEmbedding(k2);
+    const embedding1 = await getEmbedding(k1.toLowerCase());
+    const embedding2 = await getEmbedding(k2.toLowerCase());
     const similarity = await cosineSimilarity(embedding1, embedding2);
     return similarity > 0.9;
 }
@@ -123,5 +123,7 @@ const g2_edges = [
 const g1 = new Graph(g1_nodes, g1_edges);
 const g2 = new Graph(g2_nodes, g2_edges);
 
-const g3 = await constructSharedGraph(g1, g2);
-g3.print();
+// const g3 = await constructSharedGraph(g1, g2);
+// g3.print();
+
+export default constructSharedGraph;
