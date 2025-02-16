@@ -81,7 +81,7 @@ const Upload: React.FC = () => {
           backgroundClip: 'text',
           color: 'transparent'
         }}>
-          Upload Your Notes
+          Upload Study Materials
         </Typography>
 
         {/* Your notes section */}
@@ -95,7 +95,7 @@ const Upload: React.FC = () => {
         </Typography>
 
         <Grid container spacing={2} sx={{ mt: 1 }}>
-          <Grid item xs={6} sm={4}>
+          <Grid item xs={6}>
             <input
               type="file"
               id="user-png-upload" // Unique ID for PNG input
@@ -109,8 +109,13 @@ const Upload: React.FC = () => {
               fullWidth
               onClick={() => document.getElementById('user-png-upload')?.click()}
             >
-              {selectedUserPngFile ? selectedUserPngFile.name : "Upload Notes (.png)"}
+              Upload Notes (.png)
             </Button>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography variant="body1" color={selectedUserPngFile ? "green" : "#898989"} sx={{ my: 1 }}>
+              <strong>{selectedUserPngFile ? "✅ " + selectedUserPngFile.name : "❌ No File Selected"}</strong>
+            </Typography>
           </Grid>
         </Grid>
 
@@ -125,7 +130,7 @@ const Upload: React.FC = () => {
         </Typography>
 
         <Grid container spacing={2} sx={{ mt: 1 }}>
-          <Grid item xs={6} sm={4}>
+          <Grid item xs={6}>
             <input
               type="file"
               id="mp3-upload" // Unique ID for MP3 input
@@ -139,8 +144,13 @@ const Upload: React.FC = () => {
               fullWidth
               onClick={() => document.getElementById('mp3-upload')?.click()}
             >
-              {selectedMp3File ? selectedMp3File.name : "Upload Audio (.mp3)"}
+              Upload Audio (.mp3)
             </Button>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography variant="body1" color={selectedMp3File ? "green" : "#898989"} sx={{ my: 1 }}>
+              <strong>{selectedMp3File ? "✅ " + selectedMp3File.name : "❌ No File Selected"}</strong>
+            </Typography>
           </Grid>
         </Grid>
 
