@@ -43,6 +43,7 @@ function chain_bash(g: Graph, chain_len: number = 0, num_chains: number = 0) {
 interface Chain {
     nodes: N[];
     edges: Edge[];
+    weight: number;
 }
 
 function chain_synthesis(g: Graph, chain_len: number = 3, num_chains: number = 0): Chain[] {
@@ -60,7 +61,8 @@ function chain_synthesis(g: Graph, chain_len: number = 3, num_chains: number = 0
         if (depth === chain_len) {
             chains.push({
                 nodes: [...currentChain.nodes],
-                edges: [...currentChain.edges]
+                edges: [...currentChain.edges],
+                weight: currentChain.weight
             });
             return;
         }
@@ -77,9 +79,11 @@ function chain_synthesis(g: Graph, chain_len: number = 3, num_chains: number = 0
                     visited.add(nextNode);
                     currentChain.nodes.push(nextNode);
                     currentChain.edges.push(connectingEdge);
+                    currentChain.weight += nextNode.weight + connectingEdge.weight;
                     
                     dfs(currentChain, depth + 1);
                     
+                    currentChain.weight -= nextNode.weight + connectingEdge.weight;
                     currentChain.nodes.pop();
                     currentChain.edges.pop();
                     visited.delete(nextNode);
@@ -94,7 +98,8 @@ function chain_synthesis(g: Graph, chain_len: number = 3, num_chains: number = 0
         visited.add(node);
         const initialChain: Chain = {
             nodes: [node],
-            edges: []
+            edges: [],
+            weight: node.weight
         };
         dfs(initialChain, 1);
         visited.delete(node);
@@ -102,21 +107,36 @@ function chain_synthesis(g: Graph, chain_len: number = 3, num_chains: number = 0
         if (chains.length >= num_chains && num_chains > 0) break;
     }
 
-    return chains;
+    return chains; //note to self: node weights are much more overindexed than edge weights
 }
 
-async function gen_question(g: Graph) {
+//steps: 
+// one: want to take a graph
+// identify the nodes that are less frequently studied
+// then select three nodes that are connected in a chain -- some kind of dfs on sets of n nodes
 
-    //steps: 
-    // one: want to take a graph
-    // identify the nodes that are less frequently studied
-    // then select three nodes that are connected in a chain -- some kind of dfs on sets of n nodes
-    // when given these three nodes, construct a question on causality: how does this thing affect this thing affect this thing 
+function extract_json(text: string) {
+    const match = text.match(/```json([\s\S]*?)```/);
+    const match_data = match ? match[1].trim() : "";
+
+    let node_data;
+    try {
+        node_data = JSON.parse(match_data);
+    }
+    catch (error) {
+        console.error("Failed to parse JSON: ", error);
+        return null;
+    }
+    return node_data;
+}
+
+function chain_pipeline(g: Graph) {
     g.build_adjacency_matrix();
-    
+        
     // Get a chain using our updated chain_synthesis function
-    const chains = chain_synthesis(g, 3, 1);
-    
+    const chains = chain_synthesis(g, 3, 100);
+    chains.sort((a, b) => a.weight - b.weight);
+
     // Verify we got at least one chain
     if (chains.length === 0) {
         console.log("No valid chains found in the graph");
@@ -124,7 +144,7 @@ async function gen_question(g: Graph) {
     }
 
     let chain_list: string[] = [];
-    
+
     // Process each chain to include both node and edge information
     for (const chain of chains) {
         let chain_str = "";
@@ -146,34 +166,61 @@ async function gen_question(g: Graph) {
 
     console.log(chain_list);
 
-    // Prepare messages for GPT prompt
+    return { chain_list, chains };
+} 
+
+async function gen_question(chain_list: any, chain: any) {
+
+    const random_difficulty = Math.floor(Math.random() * 4) + 1;
+
     const messages = [
         {
             "role": "user", 
-            "content": "Generate a quiz question about the following ideas with the information that connects them at an easy difficulty level."
+            "content": `Generate a quiz question about the following ideas with the information that connects them at a difficulty level of ${random_difficulty} on a scale from 1 to 4, where 4 is the hardest.
+            Return this in the format
+
+            \`\`\`json
+            {
+                "question": question,
+                "answer": answer, 
+            }
+            \`\`\`
+            
+            `
         },
         {
             "role": "user", 
-            "content": chain_list[0]
+            "content": chain_list
         }
     ];
 
-    // Generate the question using GPT
     const question_gen = await prompt_gpt(messages);
-    console.log(question_gen);
-    
-    return {
-        chain: chains[0],
-        question: question_gen
-    };
+
+    const json_q = extract_json(question_gen);
+
+    json_q['difficulty'] = random_difficulty;
+    json_q['chain'] = chain;
+
+
+    return json_q;
 }
 
-// const g1_nodes  = [
-//     new N("Taxation without representation", "", 1),
-//     new N("Sugar Act", "", 2),
-//     new N("Stamp Act", "", 3),
-//     new N("American Revolution", "", 4),
-// ]
+
+/*
+    //structure of question:
+    {
+        "question": question,
+        "answer": answer, 
+        "difficulty": 1-4 Number,
+        "chain": nodes + edges that make up question
+    }
+*/
+function update_graph_weights(next_q: any, g: Graph, difficulty: number) {
+    for (const edge of next_q.edges) {
+        g.edges[edge.id].weight *= 1/(difficulty/2 + 1)
+    }
+}
+
 
 // const g2_nodes = [
 //     new N("Great Britain", "", 1),
@@ -183,21 +230,38 @@ async function gen_question(g: Graph) {
 //     new N("Sugar Act", "", 1),
 // ]
 
-// const g1_edges = [
-//     new Edge("Led to grievances from colonists", 1, g1_nodes[0], g1_nodes[1]),
-//     new Edge("Led to grievances from colonists", 2, g1_nodes[0], g1_nodes[2]),
-// ]
-
 // const g2_edges = [
-//     new Edge("They lost in this battle", 3, g2_nodes[0], g2_nodes[1]),
-//     new Edge("Root cause of conflict", 0.5, g2_nodes[2], g2_nodes[1]),
-//     new Edge("Explicitly addressed in document", 3, g2_nodes[1], g2_nodes[3]),
-//     new Edge("This led to grievances from colonists", 1.5, g2_nodes[2], g2_nodes[4])
+//     new Edge("They lost in this battle", 3, g2_nodes[0], g2_nodes[1], 0),
+//     new Edge("Root cause of conflict", 0.5, g2_nodes[2], g2_nodes[1], 1),
+//     new Edge("Explicitly addressed in document", 3, g2_nodes[1], g2_nodes[3], 2),
+//     new Edge("This led to grievances from colonists", 1.5, g2_nodes[2], g2_nodes[4], 3)
 // ]
 
-// const g1 = new Graph(g1_nodes, g1_edges);
-// const g2 = new Graph(g2_nodes, g2_edges);
+// //const g1 = new Graph(g1_nodes, g1_edges);
+// const g1 = new Graph(g2_nodes, g2_edges);
+// const g2 = await constructSharedGraph(g1, new Graph([], []));
 
-// const g3 = await constructSharedGraph(g1, g2);
+// g2.print();
 
-// gen_question(g3);
+
+//implementation:
+
+
+//running code when button press:
+// const result = chain_pipeline(g2);
+
+// if (result) {
+//     const { chain_list, chains } = result;
+//     for (let i = 0; i < 1; i++) {
+//         const next_q = await gen_question(chain_list[i], chains[i]);
+//         console.log(chains[i]);
+
+//         //if you get a question right
+//         update_graph_weights(chains[i], g2, next_q['difficulty']);
+
+//         //if you get a question wrong
+//         //possibly do nothing because I'm being lazy
+//     }
+// }
+
+// g2.print();

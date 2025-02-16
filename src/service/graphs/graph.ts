@@ -33,12 +33,14 @@ export class Edge {
     graph_id: number;
     ground_truth: boolean;
     size: number;
+    id: number;
 
-    constructor(title: string, weight: number, from: N, to: N, graph_id: number = -1, ground_truth: boolean = false, size: number = 1) {
+    constructor(title: string, weight: number, from: N, to: N, id: number, graph_id: number = -1, ground_truth: boolean = false, size: number = 1) {
         this.connection = title;
         this.weight = weight;
         this.from = from;
         this.to = to;
+        this.id = id;
         this.graph_id = graph_id;
         this.ground_truth = ground_truth;
         this.size = size;
