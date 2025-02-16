@@ -32,3 +32,13 @@ export const addNewGraph = (
 
     return id;
 }
+
+// Removes a graph from history
+export const deleteGraph = (
+    dispatch: any,
+    { id } : { id: string }
+) => {
+    
+    dispatch(removeGraph({ id }));
+    setNewAlert(dispatch, { msg: "Graph " + id + " has been deleted!", alertType: "success" });
+}
