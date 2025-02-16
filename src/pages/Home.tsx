@@ -18,8 +18,22 @@ const Home: React.FC = () => {
   return (
     <CustomPage>
       <Container sx={{ my: 3}}>
-        <Typography align="center" variant="body1" sx={{ mt: 3, mx: 2 }}>
-          This is the home page.
+        <Typography variant="h3" sx={{
+          mt: 3,
+          fontWeight: 'bold',
+          background: 'linear-gradient(to right, #E2C1FA, #C3B1FA, #B6CBFA)',
+          backgroundClip: 'text',
+          color: 'transparent'
+        }}>
+          Welcome to Odin AI
+        </Typography>
+
+        <Typography variant="h5" sx={{ mt: 3}}>
+          Unlock your learning potential with our revolutionary note-taking and lecture-analyzing app!
+        </Typography>
+
+        <Typography variant="body1">
+          We effortlessly transform raw notes and lecture recordings into interconnected knowledge graphs, revealing key themes and identifying gaps in your understanding. Visualize your knowledge, generate personalized quizzes, and conquer your studies with ease.
         </Typography>
 
         <Grid container spacing={2} sx={{ mt: 4 }}>
