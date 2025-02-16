@@ -82,7 +82,7 @@ async function constructSharedGraph(g1: Graph, g2: Graph) {
     for (const edge of g2.edges) {
         const newSource = nodeMap.get(edge.from.title);
         const newTarget = nodeMap.get(edge.to.title);
-        mergedEdges.add(new Edge(edge.connection, edge.weight, newSource, newTarget, g2.id, true));
+        mergedEdges.add(new Edge(edge.connection, edge.weight, newSource, newTarget, g2.id, true, 1));
     }
 
     return new Graph(g1.nodes, Array.from(mergedEdges) as Edge[]);
@@ -95,7 +95,7 @@ async function constructSharedGraph(g1: Graph, g2: Graph) {
 // }
 
 //More test cases
-
+/*
 const g1_nodes  = [
     new N("Taxation without representation", "", 0),
     new N("Sugar Act", "", 0),
@@ -125,5 +125,5 @@ const g2 = new Graph(g2_nodes, g2_edges);
 
 // const g3 = await constructSharedGraph(g1, g2);
 // g3.print();
-
+*/
 export default constructSharedGraph;
