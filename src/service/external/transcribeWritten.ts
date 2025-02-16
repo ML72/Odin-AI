@@ -8,63 +8,8 @@ import { createWorker } from 'tesseract.js';
 // Local state
 let imageFiles: string[] = [];
 
-// Use pre-built worker from pdf.js
-//GlobalWorkerOptions.workerSrc = path.resolve('node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs');
-
-//console.log(GlobalWorkerOptions.workerSrc);
-
-/*
-async function load_file(file: string) {
-    // Parse the PDF file
-    const data = new Uint8Array(fs.readFileSync(file));
-    const pdf = await getDocument({ data }).promise;
-    console.log(`PDF loaded with ${pdf.numPages} pages`);
-
-    for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        console.log(page)
-        const scale = 2;
-        const viewport = page.getViewport({ scale });
-
-        const canvas = createCanvas(viewport.width, viewport.height);
-        const context = canvas.getContext('2d') as any;
-        console.log(context);
-        console.log(canvas);
-        await page.render({
-            canvasContext: context,
-            viewport: viewport
-        }).promise;
-        
-        const imageURL = canvas.toDataURL('image/png');
-        imageFiles.push(imageURL);
-        console.log(`Saved page ${i} as PNG`);
-        console.log(imageURL);
-    }
-}*/
-
-/*
-async function load_file(file: string) {
-    const pdf2img = await import("pdf-img-convert");
-    console.log("PDF loaded");
-    // Both HTTP, HTTPS, and local paths are supported
-    const pdfArray = await pdf2img.convert(file);
-    
-    function saveImages(pdfArray) {
-        pdfArray.forEach((image, index) => {
-            const outputPath = path.join('./outputImages', `saveImages_${index}.png`);
-            fs.writeFile(outputPath, image, (error) => {
-                if (error) {
-                    console.error(`Error saving image ${index + 1}:`, error);
-                } else {
-                    console.log(`Image ${index + 1} saved successfully`);
-                }
-            });
-        });
-    }
-    // Call the function to save images
-    saveImages(pdfArray);
-}*/
-
+// Utility function for loading all images in a directory
+// Not used in actual webapp, only used for testing purposes
 async function loadImages(dirPath: string) {
     return new Promise((resolve, reject) => {
         fs.readdir(dirPath, (err, files) => {
@@ -82,8 +27,11 @@ async function loadImages(dirPath: string) {
     });
 }
 
+// Export audio transcription function
+// Accepts MP3 file and returns transcription
 export const handwrittenToText = async (imageFiles: string[]) => {
     let extractedText: string[] = [];
+    const start_time = new Date().getTime();
     const worker = await createWorker('eng');
     for (let i = 0; i < imageFiles.length; i++) {
         const ret = await worker.recognize(imageFiles[i]);
@@ -91,10 +39,11 @@ export const handwrittenToText = async (imageFiles: string[]) => {
         console.log(ret.data.text);
         await worker.terminate();
     }
-    return extractedText;
-}
 
-// Load the PDF file
-imageFiles = await loadImages('src/data/soviet-union');
-console.log(imageFiles);
-console.log(handwrittenToText(imageFiles));
+    // Reduce the array of text into a single string
+    let extraction: string = extractedText.reduce((acc, val) => acc + '\n' + val, '');
+
+    console.log(extraction);
+    console.log("Transcription took", new Date().getTime() - start_time, "milliseconds");
+    return extraction;
+}

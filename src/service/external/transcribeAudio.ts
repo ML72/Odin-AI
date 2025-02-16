@@ -10,7 +10,9 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
 });
 
-export const transcribeLecture = async (
+// Export audio transcription function
+// Accepts MP3 file and returns transcription
+export const transcribeAudio = async (
     file: string,
 ) => {
     const start_time = new Date().getTime();
@@ -24,5 +26,3 @@ export const transcribeLecture = async (
     console.log("Transcription took", new Date().getTime() - start_time, "milliseconds");
     return transcription;
 };
-
-// console.log(transcribeLecture("src/data/llm_lecture.mp3"))

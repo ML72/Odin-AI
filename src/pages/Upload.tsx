@@ -4,17 +4,17 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
 import CustomPage from '../components/CustomPage';
+import { CustomLinearProgress } from '../components/Progress';
 import { setNewAlert } from '../service/alert';
+import { addNewGraph } from '../service/graph';
+import { handleUpload } from '../service/upload';
 
 const Upload: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [selectedUserPngFile, setSelectedUserPngFile] = useState<File | null>(null);
   const [selectedMp3File, setSelectedMp3File] = useState<File | null>(null);
-
-  const alertHandler = () => {
-    setNewAlert(dispatch, { msg: "Hello world!" });
-  }
+  const [progress, setProgress] = useState<number>(-1);
 
   const changePage = (page: string) => {
     history.push('/' + page);
@@ -40,6 +40,31 @@ const Upload: React.FC = () => {
       setSelectedMp3File(null);
       console.error("Invalid file type. Please upload an MP3.");
        setNewAlert(dispatch, { msg: "Invalid file type. Please upload an MP3.", alertType: "error" });
+    }
+  }
+
+  // Handle submitting the form
+  const generateGraph = async () => {
+    if (progress > -1) {
+      setNewAlert(dispatch, { msg: "You already have a generation request being processed!", alertType: "error" });
+      return;
+    }
+
+    if (selectedUserPngFile || selectedMp3File) {
+      // Submit the form
+      setProgress(0);
+      setNewAlert(dispatch, { msg: "Your data is being processed, please wait...", alertType: "success" });
+      let [graphName, graphData, graphStats]: any = await handleUpload(selectedUserPngFile, selectedMp3File, setProgress);
+
+      // Save to redux
+      const id = addNewGraph(dispatch, { name: graphName, graph: graphData, stats: graphStats });
+      setNewAlert(dispatch, { msg: "Your knowledge graph and analytics have been generated!", alertType: "success" });
+      setProgress(100);
+
+      // Change page
+      changePage('display/' + id + '/graph');
+    } else {
+      setNewAlert(dispatch, { msg: "Please upload either your notes, the lecture materials, or both!", alertType: "error" });
     }
   }
   
@@ -120,7 +145,7 @@ const Upload: React.FC = () => {
 
         <Grid container spacing={2} sx={{ mt: 4 }}>
           <Grid item xs={6}>
-            <Button variant="contained" color='primary' fullWidth onClick={() => changePage('/display')}>
+            <Button variant="contained" color='primary' fullWidth onClick={generateGraph}>
               Generate Graph
             </Button>
           </Grid>
@@ -130,6 +155,11 @@ const Upload: React.FC = () => {
             </Button>
           </Grid>
         </Grid>
+
+        { progress  > -1 &&
+          <CustomLinearProgress variant="determinate" value={progress} sx={{ my: 2 }} />
+        }
+
       </Container>
     </CustomPage>
   )
