@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 import dotenv from "dotenv";
-import { Graph, Edge, N } from './../graphs/graph.ts';
-import { constructSharedGraph } from './../graphs/combine_graphs.ts';
+import { Graph, Edge, N } from './../graphs/graph';
+import { constructSharedGraph } from './../graphs/combine_graphs';
 
 dotenv.config();
 
@@ -166,10 +166,10 @@ function chain_pipeline(g: Graph) {
 
     console.log(chain_list);
 
-    return chain_list;
+    return { chain_list, chains };
 } 
 
-async function gen_question(chain_list: any) {
+async function gen_question(chain_list: any, chain: any) {
 
     const random_difficulty = Math.floor(Math.random() * 4) + 1;
 
@@ -195,12 +195,11 @@ async function gen_question(chain_list: any) {
     ];
 
     const question_gen = await prompt_gpt(messages);
-    console.log(question_gen);
-    
+
     const json_q = extract_json(question_gen);
 
     json_q['difficulty'] = random_difficulty;
-    json_q['chain'] = chain_list;
+    json_q['chain'] = chain;
 
 
     return json_q;
@@ -216,45 +215,53 @@ async function gen_question(chain_list: any) {
         "chain": nodes + edges that make up question
     }
 */
-function update_graph_weights(next_q: any, g: Graph) {
-    console.log(next_q)
-    console.log(next_q.chain)
-    console.log(next_q.chain.nodes);
-    console.log(next_q.chain.edges);
-
-    for (const edge of next_q.chain.edges) {
-        g.edges[] *= 1/(next_q['difficulty'])
+function update_graph_weights(next_q: any, g: Graph, difficulty: number) {
+    for (const edge of next_q.edges) {
+        g.edges[edge.id].weight *= 1/(difficulty/2 + 1)
     }
-
-    console.log(next_q.chain.weights);
 }
 
 
-const g2_nodes = [
-    new N("Great Britain", "", 1),
-    new N("American Revolution", "", 3),
-    new N("Taxation with no representation", "", 0.5),
-    new N("Declaration of Independence", "", 2),
-    new N("Sugar Act", "", 1),
-]
+// const g2_nodes = [
+//     new N("Great Britain", "", 1),
+//     new N("American Revolution", "", 3),
+//     new N("Taxation with no representation", "", 0.5),
+//     new N("Declaration of Independence", "", 2),
+//     new N("Sugar Act", "", 1),
+// ]
 
-const g2_edges = [
-    new Edge("They lost in this battle", 3, g2_nodes[0], g2_nodes[1]),
-    new Edge("Root cause of conflict", 0.5, g2_nodes[2], g2_nodes[1]),
-    new Edge("Explicitly addressed in document", 3, g2_nodes[1], g2_nodes[3]),
-    new Edge("This led to grievances from colonists", 1.5, g2_nodes[2], g2_nodes[4])
-]
+// const g2_edges = [
+//     new Edge("They lost in this battle", 3, g2_nodes[0], g2_nodes[1], 0),
+//     new Edge("Root cause of conflict", 0.5, g2_nodes[2], g2_nodes[1], 1),
+//     new Edge("Explicitly addressed in document", 3, g2_nodes[1], g2_nodes[3], 2),
+//     new Edge("This led to grievances from colonists", 1.5, g2_nodes[2], g2_nodes[4], 3)
+// ]
 
-//const g1 = new Graph(g1_nodes, g1_edges);
-const g2 = new Graph(g2_nodes, g2_edges);
+// //const g1 = new Graph(g1_nodes, g1_edges);
+// const g1 = new Graph(g2_nodes, g2_edges);
+// const g2 = await constructSharedGraph(g1, new Graph([], []));
 
-//const g3 = await constructSharedGraph(g1, g2);
+// g2.print();
+
+
+//implementation:
+
 
 //running code when button press:
-const chain_list = chain_pipeline(g2);
-if (chain_list) {
-    for (let i = 0; i < 1; i++) {
-        const next_q = gen_question(chain_list[i]);
-        update_graph_weights(next_q, g2);
-    }
-}
+// const result = chain_pipeline(g2);
+
+// if (result) {
+//     const { chain_list, chains } = result;
+//     for (let i = 0; i < 1; i++) {
+//         const next_q = await gen_question(chain_list[i], chains[i]);
+//         console.log(chains[i]);
+
+//         //if you get a question right
+//         update_graph_weights(chains[i], g2, next_q['difficulty']);
+
+//         //if you get a question wrong
+//         //possibly do nothing because I'm being lazy
+//     }
+// }
+
+// g2.print();

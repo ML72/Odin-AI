@@ -44,7 +44,7 @@ async function combineKeywords(k1: string, k2: string) {
 // Taking in two of your own lecture notes and overlaying them 
 export async function constructSharedGraph(g1: Graph, g2: Graph) {
     const nodeMap = new Map();
-    const mergedEdges = new Set(); 
+    const mergedEdges : Edge[] = []; 
 
     let i = 0;
 
@@ -73,7 +73,7 @@ export async function constructSharedGraph(g1: Graph, g2: Graph) {
     for (const edge of g2.edges) {
         const newSource = nodeMap.get(edge.from.title);
         const newTarget = nodeMap.get(edge.to.title);
-        mergedEdges.add(new Edge(edge.connection, edge.weight, newSource, newTarget, g2.id, true, 1));
+        mergedEdges.push(new Edge(edge.connection, edge.weight, newSource, newTarget, mergedEdges.length, g2.id, true, 1));
     }
 
     for (const edge of g1.edges) {
@@ -85,11 +85,11 @@ export async function constructSharedGraph(g1: Graph, g2: Graph) {
             (newSource == nodeMap.get(prev_edge.to.title) && newTarget == nodeMap.get(prev_edge.from.title))) {
                 added = true;
                 let weight = (edge.from.weight*edge.to.weight) / (prev_edge.from.weight*prev_edge.to.weight) * edge.weight;
-                mergedEdges.add(new Edge(prev_edge.connection, weight, newSource, newTarget, g1.id, false, 1));
+                mergedEdges.push(new Edge(prev_edge.connection, weight, newSource, newTarget, mergedEdges.length, g1.id, false, 1));
             }
         } 
         if (!added) {
-            mergedEdges.add(new Edge(edge.connection, edge.weight, newSource, newTarget, g1.id, false, 1));
+            mergedEdges.push(new Edge(edge.connection, edge.weight, newSource, newTarget, mergedEdges.length, g1.id, false, 1));
         }
     }
 
@@ -97,7 +97,7 @@ export async function constructSharedGraph(g1: Graph, g2: Graph) {
         g1.nodes[i].id = i;
     }
 
-    const edgeList = Array.from(mergedEdges) as Edge[];
+    const edgeList = mergedEdges;
 
     for (let i = 0; i < edgeList.length; i++) {
         //find id of source and dest
