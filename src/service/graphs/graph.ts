@@ -1,4 +1,5 @@
 import fs from "fs";
+
 let idCounter = 0;
 
 export class N {
@@ -7,13 +8,15 @@ export class N {
     weight: number;
     mastery: number;
     id: number;
+    degree: number;
 
-    constructor(title : string, body: string, weight: number) {
+    constructor(title : string, body: string, weight: number, degree: number = 0) {
         this.title = title;
         this.body = body;
         this.weight = weight;
         this.mastery = 0;
         this.id = 0;
+        this.degree = degree;
     }
 }
 
@@ -24,13 +27,15 @@ export class Edge {
     to: N;
     weight: number;
     graph_id: number;
+    color: number;
 
-    constructor(title: string, weight: number, from: N, to: N, graph_id: number = -1) {
+    constructor(title: string, weight: number, from: N, to: N, graph_id: number = -1, color: number = 0xFF0000) {
         this.connection = title;
         this.weight = weight;
         this.from = from;
         this.to = to;
         this.graph_id = graph_id;
+        this.color = color;
     }
 }
 
@@ -66,6 +71,24 @@ export class Graph {
                 console.log(error);
             }
         }
+    }
+
+    saveToFile(filename: string) {
+        const data = JSON.stringify({ nodes: this.nodes, edges: this.edges, id: this.id }, null, 2);
+        fs.writeFileSync(filename, data, 'utf-8');
+    }
+
+    static loadFromFile(filename: string): Graph {
+        const data = fs.readFileSync(filename, 'utf-8');
+        const obj = JSON.parse(data);
+
+        const nodes = obj.nodes.map((n: any) => new N(n.title, n.body, n.weight));
+        const edges = obj.edges.map((e: any) => new Edge(e.connection, e.weight,
+            nodes.find((n: N) => n.title === e.from.title)!,
+            nodes.find((n: N) => n.title === e.to.title)!,
+            e.graph_id));
+        
+        return new Graph(nodes, edges);
     }
     
 }
