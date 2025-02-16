@@ -49,11 +49,13 @@ export class Graph {
     nodes: N[]
     edges: Edge[];
     id: number;
+    adj_matrix: number[][];
 
     constructor(nodes: N[], edgeList: Edge[]) {
         this.nodes = nodes;
         this.edges = edgeList;
         this.id = idCounter;
+        this.adj_matrix = Array.from({ length: nodes.length }, () => Array(nodes.length).fill(0));
 
         if (this.edges.length > 0) {
             if (this.edges[0].graph_id == -1) {
@@ -113,4 +115,14 @@ export class Graph {
         });
     }
     
+    build_adjacency_matrix() {
+        let nodeIndex = new Map();
+        this.nodes.forEach((node: N, index: number) => nodeIndex.set(node, index));
+    
+        for (let edge of this.edges) {
+            let fromIndex = nodeIndex.get(edge.from);
+            let toIndex = nodeIndex.get(edge.to);
+            this.adj_matrix[fromIndex][toIndex] = edge.weight;
+        }
+    }
 }
