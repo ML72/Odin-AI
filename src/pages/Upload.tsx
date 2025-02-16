@@ -5,8 +5,7 @@ import { useHistory } from 'react-router';
 
 import CustomPage from '../components/CustomPage';
 import { CustomLinearProgress } from '../components/Progress';
-import { setNewAlert } from '../service/alert';
-import { addNewGraph } from '../service/graph';
+import { setNewAlert, addNewGraph } from '../service/redux';
 import { handleUpload } from '../service/upload';
 
 const Upload: React.FC = () => {
@@ -54,7 +53,11 @@ const Upload: React.FC = () => {
       // Submit the form
       setProgress(0);
       setNewAlert(dispatch, { msg: "Your data is being processed, please wait...", alertType: "success" });
-      let [graphName, graphData, graphStats]: any = await handleUpload(selectedUserPngFile, selectedMp3File, setProgress);
+      let [graphName, graphData, graphStats]: any = await handleUpload(
+        selectedUserPngFile,
+        selectedMp3File,
+        setProgress
+      );
 
       // Save to redux
       const id = addNewGraph(dispatch, { name: graphName, graph: graphData, stats: graphStats });

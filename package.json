@@ -43,6 +43,7 @@
     "react-router-dom": "^5.3.4",
     "reagraph": "^4.21.2",
     "redux-persist": "^6.0.0",
+    "tsx": "^4.19.2",
     "tesseract.js": "^6.0.0",
     "uuid": "^9.0.1"
   },

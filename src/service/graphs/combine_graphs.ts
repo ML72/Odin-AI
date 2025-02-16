@@ -1,7 +1,11 @@
 import fs from "fs";
 import OpenAI from "openai";
 import dotenv from "dotenv";
+<<<<<<< HEAD
 import { Graph, Edge, N } from './graph.ts';
+=======
+import { Graph, Edge, N } from './graph';
+>>>>>>> knowledge-gap
 
 // Load environment variables
 dotenv.config();
@@ -84,12 +88,23 @@ async function constructSharedGraph(g1: Graph, g2: Graph) {
     for (const edge of g2.edges) {
         const newSource = nodeMap.get(edge.from.title);
         const newTarget = nodeMap.get(edge.to.title);
-        mergedEdges.add(new Edge(edge.connection, edge.weight, newSource, newTarget, g2.id));
+        mergedEdges.add(new Edge(edge.connection, edge.weight, newSource, newTarget, g2.id, true, 1));
     }
 
     return new Graph(g1.nodes, Array.from(mergedEdges) as Edge[]);
 }
 
+<<<<<<< HEAD
+=======
+//identifying nodes that 
+// async function identifyImprovements(notes: Graph, lecture: Graph) {
+
+
+// }
+
+//More test cases
+/*
+>>>>>>> knowledge-gap
 const g1_nodes  = [
     new N("Taxation without representation", "", 0),
     new N("Sugar Act", "", 0),
@@ -119,5 +134,5 @@ const g2 = new Graph(g2_nodes, g2_edges);
 
 // const g3 = await constructSharedGraph(g1, g2);
 // g3.print();
-
+*/
 export default constructSharedGraph;

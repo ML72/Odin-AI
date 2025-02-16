@@ -3,7 +3,7 @@ import { Button, Container, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 
 import CustomPage from '../components/CustomPage';
-import { setNewAlert } from '../service/alert';
+import { setNewAlert } from '../service/redux';
 
 const DisplayStats: React.FC = () => {
   const dispatch = useDispatch();
