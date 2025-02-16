@@ -2,9 +2,10 @@ import 'katex/dist/katex.min.css';
 
 import React, { useState, useEffect } from 'react';
 import { Button, Grid, Container, Typography, Box } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { GraphCanvas, lightTheme, nodeSizeProvider } from 'reagraph';
 import { useHistory, useParams } from 'react-router';
+import { selectGraphHistoryState } from '../store/slices/graph';
 import Latex from 'react-latex-next';
 
 import CustomPage from '../components/CustomPage';
@@ -20,6 +21,16 @@ const DisplayGraph: React.FC = () => {
   const history = useHistory();
   const params: any = useParams();
 
+  // Select graph history state
+  // Return to home and throw error if graph does not exist
+  const allGraphs = useSelector(selectGraphHistoryState);
+  const graph = allGraphs.find((graph: any) => graph.id == params.id);
+  if (!graph) {
+    setNewAlert(dispatch, { msg: "Graph " + params.id + " not found!", alertType: "error" });
+    history.push('');
+  }
+
+  // Utility functions
   const alertHandler = () => {
     setNewAlert(dispatch, { msg: "Hello world!" });
   }
