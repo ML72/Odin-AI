@@ -107,8 +107,8 @@ const DisplayGraph: React.FC = () => {
 
   // Generate graph once component is mounted
   useEffect(() => {
-    normalizeEdgeWeights(graph.graph.edges);
-    normalizeNodeWeights(graph.graph.nodes);
+    //normalizeEdgeWeights(graph.graph.edges);
+    //normalizeNodeWeights(graph.graph.nodes);
     generateGraph(graph.graph);      
   }, []);
 
