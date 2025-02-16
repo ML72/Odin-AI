@@ -1,7 +1,7 @@
 import fs from "fs";
 import OpenAI from "openai";
 import dotenv from "dotenv";
-import { Graph, Edge, N } from './graph.ts';
+import { Graph, Edge, N } from './graphs/graph.js';
 
 // Load environment variables
 dotenv.config();

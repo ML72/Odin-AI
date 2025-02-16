@@ -9,7 +9,7 @@ import { setNewAlert } from '../service/alert';
 const Upload: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const [selectedUserPdfFile, setSelectedUserPdfFile] = useState<File | null>(null);
+  const [selectedUserPngFile, setSelectedUserPngFile] = useState<File | null>(null);
   const [selectedMp3File, setSelectedMp3File] = useState<File | null>(null);
 
   const alertHandler = () => {
@@ -22,31 +22,20 @@ const Upload: React.FC = () => {
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file && file.type === 'application/pdf') {
-      setSelectedUserPdfFile(file);
+    if (file && file.type === 'image/png') {
+      setSelectedUserPngFile(file);
       console.log("File selected:", file);
-
-       // Read the data (example code, can delete later)
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        if (e.target?.result) {
-          // const pdfData = e.target.result; // This will be the PDF data (e.g., as a base64 string or ArrayBuffer)
-          //  Now you can use this pdfData. For example, you can send it to backend for processing.
-        }
-      };
-      reader.readAsDataURL(file);
     } else {
-      setSelectedUserPdfFile(null);
-      setNewAlert(dispatch, { msg: "Invalid file type. Please upload a PDF.", alertType: "error" });
+      setSelectedUserPngFile(null);
+      setNewAlert(dispatch, { msg: "Invalid file type. Please upload a PNG file.", alertType: "error" });
     }
   }
 
   const handleMp3FileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file && file.type === 'audio/mpeg') { // Corrected MIME type check
+    if (file && file.type === 'audio/mpeg') {
       setSelectedMp3File(file);
       console.log("MP3 file selected:", file);
-      // ... (Optional:  You might want to do something with the audio file here)
     } else {
       setSelectedMp3File(null);
       console.error("Invalid file type. Please upload an MP3.");
@@ -81,8 +70,8 @@ const Upload: React.FC = () => {
           <Grid item xs={6} sm={4}>
             <input
               type="file"
-              id="user-pdf-upload" // Important: Add an ID to the input element
-              accept=".pdf" // Specify accepted file types
+              id="user-png-upload" // Unique ID for PNG input
+              accept=".png" // Specify accepted file types
               style={{ display: 'none' }} // Hide the input element
               onChange={handleFileUpload}
             />
@@ -90,9 +79,9 @@ const Upload: React.FC = () => {
               variant="contained"
               color="primary"
               fullWidth
-              onClick={() => document.getElementById('user-pdf-upload')?.click()} // Trigger click on the hidden input
+              onClick={() => document.getElementById('user-png-upload')?.click()}
             >
-              {selectedUserPdfFile ? selectedUserPdfFile.name : "Upload Notes (.pdf)"} {/* Display file name or default text */}
+              {selectedUserPngFile ? selectedUserPngFile.name : "Upload Notes (.png)"}
             </Button>
           </Grid>
         </Grid>

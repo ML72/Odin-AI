@@ -1,8 +1,8 @@
 import fs from "fs";
 import OpenAI from "openai";
 import dotenv from "dotenv";
-import { Graph, Edge, N } from './graph.ts';
-import constructSharedGraph from './combine_graphs.ts';
+import { Graph, Edge, N } from '../graphs/graph.js';
+import constructSharedGraph from '../combine_graphs.js';
 
 // Load environment variables
 dotenv.config();
