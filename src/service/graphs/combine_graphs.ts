@@ -96,6 +96,8 @@ export async function constructSharedGraph(g1: Graph, g2: Graph) {
         }
     }
 
+    let g = new Graph(g1.nodes, edgeList);
+    g.calculateNodeCentrality();
 
-    return new Graph(g1.nodes, edgeList);
+    return g;
 }

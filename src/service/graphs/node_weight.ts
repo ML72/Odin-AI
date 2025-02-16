@@ -55,14 +55,3 @@ export function bleuScore(text: string, title: string): number {
 }
 
 
-// const markdown_file1 = `
-// # The American Revolution (1775-1783)
-
-// ## Introduction
-// The American Revolution was a political and military struggle between the thirteen American colonies and Great Britain. It resulted in the establishment of the United States of America as an independent nation. The conflict was fueled by grievances over taxation, lack of representation, and British control over colonial affairs.
-// `
-
-// console.log(bleuScore(markdown_file1, 'American Revolution'));
-// console.log(bleuScore(markdown_file1, 'struggle'));
-// console.log(bleuScore(markdown_file1, 'Thomas Jefferson'));
-

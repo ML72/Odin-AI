@@ -97,5 +97,20 @@ export class Graph {
         
         return new Graph(nodes, edges);
     }
+
+    calculateNodeCentrality() {
+        this.nodes.forEach(node => {
+          let weightedSum = 0;
+          this.edges.forEach(edge => {
+            if (edge.from.id === node.id) {
+              weightedSum += edge.weight * edge.to.weight;
+            }
+            if (edge.to.id === node.id) {
+              weightedSum += edge.weight * edge.from.weight;
+            }
+          });
+          node.weight = node.degree + node.freq + weightedSum;
+        });
+    }
     
 }
