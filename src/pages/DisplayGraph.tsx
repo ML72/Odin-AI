@@ -39,8 +39,6 @@ const DisplayGraph: React.FC = () => {
       nodeData.push(newNode);
     }
 
-    console.log(nodeData);
-
     // Generate edges
     let edgeData = [];
     for (let edge of graph.edges) {
@@ -53,8 +51,6 @@ const DisplayGraph: React.FC = () => {
       };
       edgeData.push(newEdge);
     }
-
-    console.log(edgeData);
 
     setNodes(nodeData);
     setEdges(edgeData);
