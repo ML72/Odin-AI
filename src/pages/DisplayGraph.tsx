@@ -114,19 +114,29 @@ const DisplayGraph: React.FC = () => {
       }
     }
 
-    console.log(outgoingEdges);
-
     // Generate nodes
     let nodeData = [];
     for (let node of graph.nodes) {
-      let fillColor = '#9674FF';
-      if (outgoingEdges.has(node.id)) {
-        if (outgoingEdges.get(node.id)![0] < outgoingEdges.get(node.id)![1]) {
-          fillColor = '#9674FF';
-        } else {
-          fillColor = '#FF5972';
-        }
-      }
+      let fillColor = '#9674FF'; // Default color
+      const outgoingCount = outgoingEdges.get(node.id) ? outgoingEdges.get(node.id)![0] : 0;
+      let totalEdges = outgoingEdges.get(node.id) ? outgoingEdges.get(node.id)![1] : 1; // Avoid division by zero
+      totalEdges += outgoingCount;
+
+      // Calculate the ratio of outgoing edges
+      const ratio = Math.min(outgoingCount / totalEdges, 1); // Ensure ratio is between 0 and 1
+
+      // Interpolate between the two colors
+      const interpolateColor = (startColor: string, endColor: string, ratio: number) => {
+          const start = parseInt(startColor.slice(1), 16);
+          const end = parseInt(endColor.slice(1), 16);
+          const r = Math.round(((start >> 16) * (1 - ratio)) + ((end >> 16) * ratio));
+          const g = Math.round((((start >> 8) & 0x00FF) * (1 - ratio)) + (((end >> 8) & 0x00FF) * ratio));
+          const b = Math.round(((start & 0x0000FF) * (1 - ratio)) + ((end & 0x0000FF) * ratio));
+          return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+      };
+
+      fillColor = interpolateColor('#9674FF', '#FF5972', ratio);
+
       console.log(fillColor);
       let newNode = {
         id: node.id.toString(),
@@ -226,7 +236,7 @@ const DisplayGraph: React.FC = () => {
           backgroundClip: 'text',
           color: 'transparent'
         }}>
-          Knowledge Graph
+          {graph.name.substring(0, graph.name.indexOf("."))}
         </Typography>
 
         <Grid container sx={{ mt: 1 }}>
