@@ -20,8 +20,8 @@ const DisplayGraph: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const params: any = useParams();
-  const fudge = 1;
-  const edgeFudge = 1;
+  const fudge = 5;
+  const edgeFudge = 3;
   const edgeThreshold = 37.5;
 
   // Utility functions
@@ -46,6 +46,7 @@ const DisplayGraph: React.FC = () => {
       if (edge.weight * edgeFudge >= edgeThreshold) {
         edge.weight = edgeThreshold;
       } else {
+        edge.weight = Math.log(edge.weight + 1);
         edge.weight *= edgeFudge;
       }
     }
@@ -69,7 +70,6 @@ const DisplayGraph: React.FC = () => {
     // Generate nodes
     let nodeData = [];
     for (let node of graph.nodes) {
-      console.log(node.weight);
       let newNode = {
         id: node.id.toString(),
         label: node.title,
@@ -82,6 +82,7 @@ const DisplayGraph: React.FC = () => {
     // Generate edges
     let edgeData = [];
     for (let edge of graph.edges) {
+      console.log(edge.weight);
       let newEdge = {
         source: edge.from.id.toString(),
         target: edge.to.id.toString(),
@@ -107,8 +108,8 @@ const DisplayGraph: React.FC = () => {
 
   // Generate graph once component is mounted
   useEffect(() => {
-    //normalizeEdgeWeights(graph.graph.edges);
-    //normalizeNodeWeights(graph.graph.nodes);
+    normalizeEdgeWeights(graph.graph.edges);
+    normalizeNodeWeights(graph.graph.nodes);
     generateGraph(graph.graph);      
   }, []);
 
