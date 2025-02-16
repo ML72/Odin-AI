@@ -86,14 +86,54 @@ const DisplayGraph: React.FC = () => {
   }
 
   const generateGraph = (graph: Graph) => {
+    // Based on the type of edge that occurs the most as an outgoing edge from a node
+    // color the node accordingly
+    let outgoingEdges = new Map<number, [number, number]>();
+    for (let edge of graph.edges) {
+      if (!outgoingEdges.has(edge.from.id)) {
+        outgoingEdges.set(edge.from.id, [0, 0]);
+      } 
+      if (!outgoingEdges.has(edge.to.id)) {
+        outgoingEdges.set(edge.to.id, [0, 0]);
+      }
+      if (edge.ground_truth) {
+        outgoingEdges.get(edge.from.id)![0]++;
+      } else {
+        outgoingEdges.get(edge.from.id)![1]++;
+      }
+      if (edge.ground_truth) {
+        outgoingEdges.get(edge.to.id)![0]++;
+      } else {
+        outgoingEdges.get(edge.to.id)![1]++;
+      }
+    }
+
+    for (let node of graph.nodes) {
+      if (!outgoingEdges.has(node.id)) {
+        console.log(outgoingEdges.get(node.id)![0]);
+      }
+    }
+
+    console.log(outgoingEdges);
+
     // Generate nodes
     let nodeData = [];
     for (let node of graph.nodes) {
+      let fillColor = '#9674FF';
+      if (outgoingEdges.has(node.id)) {
+        if (outgoingEdges.get(node.id)![0] < outgoingEdges.get(node.id)![1]) {
+          fillColor = '#9674FF';
+        } else {
+          fillColor = '#FF5972';
+        }
+      }
+      console.log(fillColor);
       let newNode = {
         id: node.id.toString(),
         label: node.title,
         body: node.body,
-        size: node.weight
+        size: node.weight,
+        fill: fillColor
       };
       nodeData.push(newNode);
     }
