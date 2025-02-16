@@ -61,7 +61,9 @@ async function constructSharedGraph(g1: Graph, g2: Graph) {
     const nodeMap = new Map();
     const mergedEdges = new Set(g1.edges); 
 
-    for (const node of g1.nodes) {
+    let i = 0;
+
+    for (let node of g1.nodes) {
         nodeMap.set(node.title, node);
     }
 

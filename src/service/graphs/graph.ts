@@ -6,16 +6,16 @@ export class N {
     title: string;
     body: string
     weight: number;
+    freq: number;
     degree: number;
-    mastery: number;
     id: number;
     
-    constructor(title: string, body: string, weight: number, degree: number = 0, id: number) {
+    constructor(title: string, body: string, weight: number, id: number, degree: number = 0) {
         this.title = title;
         this.body = body;
         this.weight = weight;
+        this.freq = 0; //frequency in the markdown text
         this.degree = degree;
-        this.mastery = 0;
         this.id = id;
     }
 
