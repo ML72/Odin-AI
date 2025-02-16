@@ -88,14 +88,6 @@ async function constructSharedGraph(g1: Graph, g2: Graph) {
     return new Graph(g1.nodes, Array.from(mergedEdges) as Edge[]);
 }
 
-//identifying nodes that 
-// async function identifyImprovements(notes: Graph, lecture: Graph) {
-
-
-// }
-
-//More test cases
-
 const g1_nodes  = [
     new N("Taxation without representation", "", 0),
     new N("Sugar Act", "", 0),

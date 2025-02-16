@@ -6,7 +6,6 @@ export class N {
     title: string;
     body: string
     weight: number;
-    mastery: number;
     id: number;
     degree: number;
 
@@ -14,9 +13,12 @@ export class N {
         this.title = title;
         this.body = body;
         this.weight = weight;
-        this.mastery = 0;
         this.id = 0;
         this.degree = degree;
+    }
+
+    toString() {
+        return this.title + "\n" + this.body; //can also contain body if changed later
     }
 }
 

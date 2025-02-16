@@ -57,20 +57,57 @@ async function extractBoldTerms(markdown: string) {
     return matches;
 }
 
+
+async function generateNodes(markdown_text: string) {
+    const node_gen = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        store: true,
+        messages: [
+            {"role": "user", 
+                "content": `Given this markdown text, please extract a list of concepts and named entities that are key to the text, as well as a brief dictionary-like entry defining the entity in the context of the text.
+                This should be presented in the form 
+
+                \`\`\`json 
+                {
+                    entity name: description of the entity in the text  
+                }
+                \`\`\`
+
+                `
+            },
+            {"role": "user", "content": markdown_text},
+        ]
+    });
+
+    console.log(node_gen.choices[0].message.content)
+    return node_gen.choices[0].message.content;
+}
+
 //named entities mention?
-export const generateConcepts = async (
+export const generateEdges = async (
     markdown_text: string,
+    node_list: string
 ) => {
+
+    // let node_titles = "";
+    // for (const node of node_list) {
+    //     node_titles += node.title + ", ";
+    // }
+    // console.log(node_titles);
+
     const concept_list = await openai.chat.completions.create({
         model: "gpt-4o-mini",
         store: true,
         messages: [
             {"role": "user", "content": 
-                `Generate a knowledge graph for the following markdown file. Node should represent key concepts, and edges should be a one-sentence description of how the first node affects the next. Also, assess how significant the conection is with a numerical value from 0 to 1, the weight. 
-                Generate a list of nodes, and then write the nodes in the following format for your response:
+                `Generate a knowledge graph for the following markdown file by identifying the edges that connect the given list of nodes. 
+                    
+                ${node_list}
+
+                Each edge should be a one-sentence description of how the nodes are connected based on the concepts presented in the attached text. Also, assess how significant the conection is in the context of the input text with a numerical value from 0 to 1 denoted by the weight, where 1 is the central idea of the text and 0 is insignificant. 
                 
                 {"node_title": {
-                        "edges": [{"node_dst": title, "edge": one-sentence connection from the text, "weight": how much this connection matters to the text}]
+                        "edges": [{"node_dst": title, "edge": brief connection between the nodes from the text, "weight": the relevance of this connection in the text}]
                 },...}
                 
                 `},
@@ -82,48 +119,39 @@ export const generateConcepts = async (
     return concept_list.choices[0].message.content;
 };
 
-const llm_output = `
-Here's a knowledge graph based on the provided markdown text about the American Revolution:
-
-\`\`\`json
-{
-    "American Revolution": {
-        "edges": [
-            {"node_dst": "Thirteen Colonies", "edge": "The American Revolution was a struggle between the thirteen American colonies and Great Britain, marking their fight for independence.", "weight": 0.9},
-            {"node_dst": "Great Britain", "edge": "The conflict was primarily against Great Britain, who exerted control over the American colonies.", "weight": 0.85}
-        ]
-    },
-    "Thirteen Colonies": {
-        "edges": [
-            {"node_dst": "Taxation Without Representation", "edge": "Grievances among the thirteen colonies included taxation without representation, leading to revolutionary sentiments.", "weight": 0.8},
-            {"node_dst": "Growing Colonial Resistance", "edge": "The struggle of the thirteen colonies sparked movements like the Sons of Liberty, reflecting their resistance.", "weight": 0.75}
-        ]
-    },
-    "Great Britain": {
-        "edges": [
-            {"node_dst": "Taxation Without Representation", "edge": "The British government imposed taxes without local representation, fueling discontent among the colonies.", "weight": 0.9}
-        ]
-    }
-}
-\`\`\` 
-
-` //to replace with manual llm output if necessary
-
 function extractCode(input: string) {
     const match = input.match(/```json([\s\S]*?)```/);
     return match ? match[1].trim() : "";
 }
 
 async function graph_gen(markdown_text: string) {
-    const llm_graph = await generateConcepts(markdown_text);
-    //const llm_graph = llm_output;
+    const node_set = await generateNodes(markdown_text);
+    const node_list = extractCode(node_set);
+
+    let node_data;
+    try {
+        node_data = JSON.parse(node_list);
+    }
+    catch (error) {
+        console.error("Failed to parse JSON: ", error);
+        return null;
+    }
+
+    //convert node_data -> node_list
+    const node_titles = Object.keys(node_data);
+    const node_list_str = node_titles.join(", ");
+    
+    console.log(node_list_str);
+
+    const llm_graph = await generateEdges(markdown_text, node_list_str);
     const json_graph = extractCode(llm_graph);
 
     let data;
     try {
         data = JSON.parse(json_graph);
-    } catch (error) {
-        console.error("Failed to parse JSON:", error);
+    } 
+    catch (error) {
+        console.error("Failed to parse JSON: ", error);
         return null;
     }
     
@@ -131,7 +159,8 @@ async function graph_gen(markdown_text: string) {
     let edges = [];
     
     for (const [nodeTitle, nodeData] of Object.entries(data)) {
-        let node = new N(nodeTitle, "", 0);
+        const node_body = node_data[nodeTitle];
+        let node = new N(nodeTitle, node_body, 0);
         nodes.set(nodeTitle, node);
         
         for (const edgeData of nodeData.edges) {
@@ -160,7 +189,17 @@ const markdown_file2 = `
 The American Revolution was a pivotal moment in history, marking the colonies' break from Great Britain. Frustrations over British policies and governance fueled the desire for independence, leading to a prolonged conflict that reshaped the future of North America.
 `
 
+
 const g1 = await graph_gen(markdown_file1);
+
+// if (g1) {
+//     g1.print();
+// }
+// else {
+//     console.log("g1 is null");
+// }
+// /*
+
 const g2 = await graph_gen(markdown_file2);
 
 if (g1 && g2) {
@@ -177,5 +216,6 @@ if (g1 && g2) {
 else {
     console.log("one of the graphs is null")
 }
+//    */
 
-export default generateConcepts;
+export default generateEdges;
