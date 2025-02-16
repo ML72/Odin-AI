@@ -125,7 +125,7 @@ export async function graph_gen(markdown_text: string) {
             let targetNode = nodes.get(targetTitle) || new N(targetTitle, "", 0);
             nodes.set(targetTitle, targetNode);
             
-            let edge = new Edge(edgeData.edge, edgeData.weight, node, targetNode, edges.length);
+            let edge: any = new Edge(edgeData.edge, edgeData.weight, node, targetNode, edges.length);
             edges.push(edge);
         }
     }

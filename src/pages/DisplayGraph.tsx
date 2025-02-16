@@ -3,7 +3,7 @@ import 'katex/dist/katex.min.css';
 import React, { useState, useEffect, useRef } from 'react';
 import { Button, Grid, Container, Typography, Box } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { GraphCanvas, lightTheme, nodeSizeProvider, useSelection } from 'reagraph';
+import { GraphCanvas, GraphCanvasRef, lightTheme, nodeSizeProvider, useSelection } from 'reagraph';
 import { useHistory, useParams } from 'react-router';
 import { selectGraphHistoryState } from '../store/slices/graph';
 import { chain_pipeline, gen_question, update_graph_weights } from '../service/external/quiz_gen';
@@ -16,6 +16,7 @@ import { Graph, N, Edge } from '../service/graphs/graph';
 const DisplayGraph: React.FC = () => {
   const [nodes, setNodes] = useState<any>([]);
   const [edges, setEdges] = useState<any>([]);
+  const [adjNodes, setAdjNodes] = useState<any>([]);
   const [heading, setHeading] = useState<string>("Select a node to view details!");
   const [body, setBody] = useState<string>("Learn more about different topics and connections between topics by selecting nodes or edges.");
   const [question, setQuestion] = useState<{ question: string, answer: string, difficulty: number } | null>(null);
@@ -132,6 +133,16 @@ const DisplayGraph: React.FC = () => {
   const onClickNode = (node: any) => {
     setHeading(node.label);
     setBody(node.body);
+    setAdjNodes(edges.filter(
+      (edge: any) => edge.source === node.id || edge.target === node.id
+    ).map((edge: any) => {
+      const otherNodeId = edge.source === node.id ? edge.target : edge.source;
+      return {
+        toOrFrom: edge.source === node.id ? 'to' : 'from',
+        targetLabel: nodes.find((node: any) => node.id === otherNodeId)?.label,
+        label: edge.label
+      };
+    }));
     graphRef.current?.fitNodesInView([node.id]);
   }
 
@@ -205,30 +216,40 @@ const DisplayGraph: React.FC = () => {
           <Grid item xs={4}>
             {/* Display node details */}
             <Typography variant="h5">
-              {heading}
+              <strong>{heading}</strong>
             </Typography>
             <Typography variant="body1">
               <Latex>
                 {body}
               </Latex>
             </Typography>
+
+            {adjNodes.length > 0 && (
+              <Box sx={{ mt: 2 }}>
+                <Typography variant="body1"><strong>Connections</strong></Typography>
+                <ul>
+                  {adjNodes.map((adjNode: any, index: number) => (
+                    <li><Typography key={index} variant="body2">
+                      <em>{adjNode.targetLabel}</em> ({adjNode.toOrFrom}) &rarr; {adjNode.label} 
+                    </Typography>
+                    </li>
+                  ))}
+                </ul>
+              </Box>
+            )}
+
             {/* Display node details */}
 
             {/* Buttons */}
             <Grid container spacing={2} sx={{ mt: 4 }}>
               <Grid item xs={6}>
-                <Button variant="contained" color='primary' fullWidth onClick={() => changePage('display/' + params.id + '/stats')}>
-                  View Analytics
+                <Button variant="contained" color='primary' fullWidth onClick={() => handleGenerateQuestion(graph.graph)}>
+                  Generate Question
                 </Button>
               </Grid>
               <Grid item xs={6}>
                 <Button variant="outlined" color='primary' fullWidth onClick={() => changePage('')}>
                   Home
-                </Button>
-              </Grid>
-              <Grid item xs={12}>
-                <Button variant="contained" color='secondary' fullWidth onClick={() => handleGenerateQuestion(graph.graph)}>
-                  Generate Question
                 </Button>
               </Grid>
             </Grid>
