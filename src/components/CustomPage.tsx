@@ -4,11 +4,23 @@ import { IonContent } from '@ionic/react';
 
 import Alert from './Alert';
 
+/* AOS CSS */
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 interface ComponentProps {
   children?: ReactNode;
 }
 
 const CustomPage: React.FC<ComponentProps> = ({ children = [] }: ComponentProps) => {
+
+  AOS.init({
+    disable: function () {
+        var maxWidth = 600;
+        return window.innerWidth < maxWidth;
+    },
+    mirror: true
+  });
   
   const theme: any = createTheme({
     palette: {
