@@ -118,6 +118,11 @@ const DisplayGraph: React.FC = () => {
     graphRef.current?.fitNodesInView([node.id]);
   }
 
+  const onClickEdge = (edge: any) => {
+    setHeading(edge.title);
+    setBody(edge.label);
+  }
+
   // Define graph theme
   const THEME_COLOR = '#9674FF';
   const graphTheme = {
@@ -175,6 +180,7 @@ const DisplayGraph: React.FC = () => {
                 edges={edges}
                 theme={graphTheme}
                 onNodeClick={onClickNode}
+                onEdgeClick={onClickEdge}
                 ref={graphRef}
               />
             </Box>
