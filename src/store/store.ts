@@ -5,14 +5,16 @@ import { persistReducer, persistStore } from 'redux-persist';
 import thunk from 'redux-thunk';
 
 import { uiSlice } from "./slices/ui";
+import { graphSlice } from './slices/graph';
 
 const combinedReducer = combineReducers({
-    [uiSlice.name]: uiSlice.reducer
+    [uiSlice.name]: uiSlice.reducer,
+    [graphSlice.name]: graphSlice.reducer
 });
 
 const persistConfig = {
   key: 'odinx-ai-root',
-  whitelist: [],
+  whitelist: [graphSlice.name],
   storage
 }
 const persistedReducer = persistReducer(persistConfig, combinedReducer);
