@@ -6,15 +6,17 @@ export class N {
     title: string;
     body: string
     weight: number;
-    id: number;
     degree: number;
-
-    constructor(title : string, body: string, weight: number, degree: number = 0) {
+    mastery: number;
+    id: number;
+    
+    constructor(title: string, body: string, weight: number, degree: number = 0, id: number) {
         this.title = title;
         this.body = body;
         this.weight = weight;
-        this.id = 0;
         this.degree = degree;
+        this.mastery = 0;
+        this.id = id;
     }
 
     toString() {
@@ -29,15 +31,17 @@ export class Edge {
     to: N;
     weight: number;
     graph_id: number;
-    color: number;
+    ground_truth: boolean;
+    size: number;
 
-    constructor(title: string, weight: number, from: N, to: N, graph_id: number = -1, color: number = 0xFF0000) {
+    constructor(title: string, weight: number, from: N, to: N, graph_id: number = -1, ground_truth: boolean = false, size: number) {
         this.connection = title;
         this.weight = weight;
         this.from = from;
         this.to = to;
         this.graph_id = graph_id;
-        this.color = color;
+        this.ground_truth = ground_truth;
+        this.size = size;
     }
 }
 
@@ -68,6 +72,7 @@ export class Graph {
         for (let edge of this.edges) {
             try {
                 console.log(`Edge from ${edge.from.title} to ${edge.to.title}, Graph ID: ${edge.graph_id}`);
+                console.log(`Edge weight ${edge.weight}`);
             }
             catch (error) {
                 console.log(error);
@@ -84,11 +89,11 @@ export class Graph {
         const data = fs.readFileSync(filename, 'utf-8');
         const obj = JSON.parse(data);
 
-        const nodes = obj.nodes.map((n: any) => new N(n.title, n.body, n.weight));
+        const nodes = obj.nodes.map((n: any) => new N(n.title, n.body, n.weight, n.degree, n.id));
         const edges = obj.edges.map((e: any) => new Edge(e.connection, e.weight,
             nodes.find((n: N) => n.title === e.from.title)!,
             nodes.find((n: N) => n.title === e.to.title)!,
-            e.graph_id));
+            e.graph_id, e.ground_truth, e.size));
         
         return new Graph(nodes, edges);
     }
