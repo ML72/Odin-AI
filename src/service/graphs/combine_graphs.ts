@@ -38,7 +38,7 @@ async function combineKeywords(k1: string, k2: string) {
     const embedding1 = await getEmbedding(k1.toLowerCase());
     const embedding2 = await getEmbedding(k2.toLowerCase());
     const similarity = await cosineSimilarity(embedding1, embedding2);
-    return similarity > 0.9;
+    return similarity > 0.6;
 }
 
 // Taking in two of your own lecture notes and overlaying them 
@@ -121,17 +121,17 @@ export async function constructSharedGraph(g1: Graph, g2: Graph) {
 /*
 const g1_nodes  = [
     new N("Taxation without representation", "", 1),
-    new N("Sugar Act", "", 2),
+    new N("Feedforward Neural net", "", 2),
     new N("Stamp Act", "", 3),
-    new N("American Revolution", "", 4),
+    new N("Large Language Models", "", 4),
 ]
 
 const g2_nodes = [
     new N("Great Britain", "", 1),
-    new N("American Revolution", "", 3),
+    new N("Large Language Models (LLMs)", "", 3),
     new N("Taxation with no representation", "", 0.5),
     new N("Declaration of Independence", "", 2),
-    new N("Sugar Act", "", 1),
+    new N("Neural Network", "", 1),
 ]
 
 const g1_edges = [
@@ -149,6 +149,6 @@ const g2_edges = [
 const g1 = new Graph(g1_nodes, g1_edges);
 const g2 = new Graph(g2_nodes, g2_edges);
 
-const g3 = await constructSharedGraph(g1, g2);
+const g3 = await constructSharedGraph(g2, g1);
 g3.print();
 */

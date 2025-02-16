@@ -20,8 +20,8 @@ const DisplayGraph: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const params: any = useParams();
-  const fudge = 10;
-  const edgeFudge = 25;
+  const fudge = 1;
+  const edgeFudge = 1;
   const edgeThreshold = 37.5;
 
   // Utility functions
@@ -103,8 +103,8 @@ const DisplayGraph: React.FC = () => {
 
   // Generate graph once component is mounted
   useEffect(() => {
-    //normalizeEdgeWeights(graph.graph.edges);
-    //normalizeNodeWeights(graph.graph.nodes);
+    normalizeEdgeWeights(graph.graph.edges);
+    normalizeNodeWeights(graph.graph.nodes);
     generateGraph(graph.graph);      
   }, []);
 
