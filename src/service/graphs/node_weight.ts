@@ -1,4 +1,4 @@
-import { Graph, Edge, N } from './graph.ts';
+import { Graph, Edge, N } from './graph';
 
 //can use openai tokenization
 function tokenize(text: string) {

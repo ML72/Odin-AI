@@ -1,9 +1,9 @@
 import fs from "fs";
 import OpenAI from "openai";
 import dotenv from "dotenv";
-import { Graph, Edge, N } from '../graphs/graph.ts';
-import constructSharedGraph from '../graphs/combine_graphs.ts';
-import { bleuScore } from '../graphs/node_weight.ts';
+import { Graph, Edge, N } from '../graphs/graph';
+import constructSharedGraph from '../graphs/combine_graphs';
+import { bleuScore } from '../graphs/node_weight';
 
 // Load environment variables
 dotenv.config();
@@ -93,7 +93,7 @@ function extractCode(input: string) {
 
 
 async function graph_gen(markdown_text: string) {
-    const node_set = await generateNodes(markdown_text);
+    const node_set: any = await generateNodes(markdown_text);
     const node_list = extractCode(node_set);
 
     let node_data;
@@ -111,10 +111,10 @@ async function graph_gen(markdown_text: string) {
     
     console.log(node_list_str);
 
-    const llm_graph = await generateEdges(markdown_text, node_list_str);
+    const llm_graph: any = await generateEdges(markdown_text, node_list_str);
     const json_graph = extractCode(llm_graph);
 
-    let data;
+    let data: any;
     try {
         data = JSON.parse(json_graph);
     } 
@@ -126,7 +126,7 @@ async function graph_gen(markdown_text: string) {
     let nodes = new Map();
     let edges = [];
     
-    for (const [nodeTitle, nodeData] of Object.entries(data)) {
+    for (const [nodeTitle, nodeData] of Object.entries<any>(data)) {
         let node = new N(nodeTitle, node_data[nodeTitle], 0);
         node.freq = bleuScore(markdown_text, node.title);
 
