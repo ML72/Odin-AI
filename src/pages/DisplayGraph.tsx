@@ -19,7 +19,7 @@ const DisplayGraph: React.FC = () => {
   const [adjNodes, setAdjNodes] = useState<any>([]);
   const [heading, setHeading] = useState<string>("Select a node to view details!");
   const [body, setBody] = useState<string>("Learn more about different topics and connections between topics by selecting nodes or edges.");
-  const [question, setQuestion] = useState<{ question: string, answer: string, difficulty: number } | null>(null);
+  const [question, setQuestion] = useState<{ question: string, answer: string, difficulty: number, answerShown: boolean } | null>(null);
   const dispatch = useDispatch();
   const history = useHistory();
   const params: any = useParams();
@@ -28,10 +28,6 @@ const DisplayGraph: React.FC = () => {
   const edgeThreshold = 37.5;
 
   // Utility functions
-  const alertHandler = () => {
-    setNewAlert(dispatch, { msg: "Hello world!" });
-  }
-
   const changePage = (page: string) => {
     history.push('/' + page);
   }
@@ -59,11 +55,17 @@ const DisplayGraph: React.FC = () => {
 
     const result = chain_pipeline(graph);
 
+    setNewAlert(dispatch, { msg: "Generating personalized question...", alertType: "info" });
+
     if (result) {
       const { chain_list, chains } = result;
       const next_q = await gen_question(chain_list[0], chains[0]);
       update_graph_weights(chains[0], graph, next_q['difficulty']);
-      setQuestion(next_q);
+      console.log(next_q);
+      setQuestion({
+        ...next_q,
+        answerShown: false
+      });
     } else {
       setNewAlert(dispatch, { msg: "Failed to generate question", alertType: "error" });
     }
@@ -99,7 +101,6 @@ const DisplayGraph: React.FC = () => {
     // Generate edges
     let edgeData = [];
     for (let edge of graph.edges) {
-      console.log(edge.weight);
       let newEdge = {
         source: edge.from.id.toString(),
         target: edge.to.id.toString(),
@@ -229,7 +230,7 @@ const DisplayGraph: React.FC = () => {
                 <Typography variant="body1"><strong>Connections</strong></Typography>
                 <ul>
                   {adjNodes.map((adjNode: any, index: number) => (
-                    <li><Typography key={index} variant="body2">
+                    <li key={index}><Typography key={index} variant="body2">
                       <em>{adjNode.targetLabel}</em> ({adjNode.toOrFrom}) &rarr; {adjNode.label} 
                     </Typography>
                     </li>
@@ -237,8 +238,6 @@ const DisplayGraph: React.FC = () => {
                 </ul>
               </Box>
             )}
-
-            {/* Display node details */}
 
             {/* Buttons */}
             <Grid container spacing={2} sx={{ mt: 4 }}>
@@ -255,12 +254,16 @@ const DisplayGraph: React.FC = () => {
             </Grid>
           </Grid>
         </Grid>
+
+        {/* Display generated question */}
         {question && (
-          <Box sx={{ mt: 4 }}>
-            <Typography variant="h5">Generated Question</Typography>
-            <Typography variant="body1">Question: {question.question}</Typography>
-            <Typography variant="body1">Answer: {question.answer}</Typography>
-            <Typography variant="body1">Difficulty: {question.difficulty}</Typography>
+          <Box sx={{ mt: 5, mb: 4 }}>
+            <Typography variant="h5"><strong>Personalized Quiz Question</strong></Typography>
+            <Typography variant="body1"><strong>Question:</strong> {question.question}</Typography>
+            {question.answerShown && <Typography variant="body1"><strong>Answer:</strong> {question.answer}</Typography>}
+            <Button variant="outlined" color='primary' sx={{ mt: 1 }} onClick={() => setQuestion({ ...question, answerShown: !question.answerShown })}>
+              {question.answerShown ? "Hide Answer" : "Show Answer"}
+            </Button>
           </Box>
         )}
       </Container>
