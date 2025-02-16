@@ -1,8 +1,38 @@
 import React from 'react';
-import { Button, Container, Grid, Typography } from '@mui/material';
+import {
+  Button,
+  Container,
+  Grid,
+  Typography,
+  CssBaseline,
+  Box,
+  Stack,
+  Link,
+  Card,
+  CardMedia,
+  CardContent
+} from '@mui/material';
 import { useHistory } from 'react-router';
 
 import CustomPage from '../components/CustomPage';
+
+const cards = [
+  {
+    title: "Identify Gaps",
+    content: "Pinpoint missing topics in your notes by comparing your knowledge graph against lecture content.",
+    thumbnail: "img/undraw_search-app_cpm0.svg",
+  },
+  {
+    title: "Visualize Knowledge",
+    content: "Transform abstract concepts into interactive knowledge graphs, providing a clear overview of relationships and themes.",
+    thumbnail: "img/undraw_analytics_6mru.svg",
+  },
+  {
+    title: "Personalize Quizzes",
+    content: "Generate custom quizzes tailored to your specific knowledge gaps and learning style, optimizing your study efficiency",
+    thumbnail: "img/undraw_mobile-content_yz21.svg",
+  }
+];
 
 const Home: React.FC = () => {
   const history = useHistory();
@@ -17,38 +47,113 @@ const Home: React.FC = () => {
   
   return (
     <CustomPage>
-      <Container sx={{ my: 3}}>
-        <Typography variant="h3" sx={{
-          mt: 3,
-          fontWeight: 'bold',
-          background: 'linear-gradient(to right, #E2C1FA, #C3B1FA, #B6CBFA)',
-          backgroundClip: 'text',
-          color: 'transparent'
-        }}>
-          Welcome to Odin AI
-        </Typography>
-
-        <Typography variant="h5" sx={{ mt: 3}}>
-          Unlock your learning potential with our revolutionary note-taking and lecture-analyzing app!
-        </Typography>
-
-        <Typography variant="body1">
-          We effortlessly transform raw notes and lecture recordings into interconnected knowledge graphs, revealing key themes and identifying gaps in your understanding. Visualize your knowledge, generate personalized quizzes, and conquer your studies with ease.
-        </Typography>
-
-        <Grid container spacing={2} sx={{ mt: 4 }}>
-          <Grid item xs={6}>
-            <Button variant="contained" fullWidth onClick={clickUpload}>
+      <CssBaseline />
+      <main>
+        <Container maxWidth="sm" align="center" sx={{ my: 5 }}>
+          <Box
+            component="img"
+            sx={{
+              width: "70%"
+            }}
+            src="img/undraw_analysis_1k4x.svg"
+            data-aos='fade-up'
+            data-aos-duration='500'
+          />
+          <Typography
+            sx={{ pt: 2 }}
+            component="h1"
+            variant="h3"
+            fontWeight="fontWeightMedium"
+            align="center"
+            color="text.primary"
+            gutterBottom
+          >
+            Welcome to {" "}
+            <Box color="primary.main" display="inline">
+              Odin AI
+            </Box>
+          </Typography>
+          <Typography
+            variant="h5"
+            align="center"
+            color="text.secondary"
+            sx={{ pt: 1 }}
+            paragraph
+          >
+            Unlock your learning potential with our revolutionary note-taking and lecture-analyzing approach.
+          </Typography>
+          <Stack
+            sx={{ pt: 3 }}
+            direction="row"
+            spacing={2}
+            justifyContent="center"
+          >
+            <Button variant="contained" size="large" fullWidth onClick={clickUpload}>
               Upload New Materials
             </Button>
-          </Grid>
-          <Grid item xs={6}>
-            <Button variant="outlined" fullWidth onClick={clickHistory}>
+            <Button variant="outlined" size="large" fullWidth onClick={clickHistory}>
               View Past Notes
             </Button>
+          </Stack>
+        </Container>
+        <Container sx={{ py: 7 }} maxWidth="lg">
+          <Typography
+            sx={{ pb: 4 }}
+            component="h2"
+            variant="h5"
+            fontWeight="fontWeightMedium"
+            align="center"
+            color="text.primary"
+            gutterBottom
+          >
+            Transform
+            {" "}<Box color="primary.main" display="inline">
+              raw notes and recordings
+            </Box>{" "}
+            into
+            {" "}<Box color="primary.main" display="inline">
+              interconnected knowledge graphs
+            </Box>
+            , revealing key themes and identifying gaps in your understanding.
+          </Typography>
+          <Grid container spacing={4}>
+            {cards.map((card) => (
+              <Grid item key={card.title} xs={12} sm={6} md={4}>
+                <Card
+                  sx={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    boxShadow: "0"
+                  }}
+                >
+                  <CardMedia
+                    component="img"
+                    sx={{
+                      pb: "10%",
+                      pt: "2%",
+                      px: "20%"
+                    }}
+                    image={card.thumbnail}
+                    data-aos='fade-out' data-aos-duration='500' data-aos-delay="300"
+                  />
+                  <CardContent sx={{ flexGrow: 1 }}>
+                    <Typography
+                      gutterBottom
+                      variant="h5"
+                      component="h2"
+                      fontWeight="fontWeightMedium"
+                    >
+                      {card.title}
+                    </Typography>
+                    <Typography>{card.content}</Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
           </Grid>
-        </Grid>
-      </Container>
+        </Container>
+      </main>
     </CustomPage>
   )
 };
