@@ -34,7 +34,6 @@ export const handwrittenToText = async (imageFiles: string[]) => {
     for (let i = 0; i < imageFiles.length; i++) {
         const ret = await worker.recognize(imageFiles[i]);
         extractedText.push(ret.data.text);
-        console.log(ret.data.text);
         await worker.terminate();
     }
 

@@ -1,12 +1,11 @@
 import OpenAI from "openai";
-import dotenv from "dotenv";
 
-// Load environment variables
-dotenv.config();
+import { OPENAI_API_KEY } from "../../../keys";
 
 // Load the OpenAI API key from the environment
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
+    apiKey: OPENAI_API_KEY,
+    dangerouslyAllowBrowser: true
 });
 
 export const transformToMarkdown = async (
@@ -75,29 +74,8 @@ export const transformToMarkdown = async (
         ],
         store: true,
     });
+    
     console.log(completion.choices[0].message.content);
-    console.log("Transcription took", new Date().getTime() - startTime, "milliseconds");
+    console.log("Markdown Transform took", new Date().getTime() - startTime, "milliseconds");
     return completion.choices[0].message.content;
 };
-
-let data = "\"Frond Sodety Ruiteg the Puce A :\
-Zot Brat. C 5 907 © +he population was dowdnated\
-— = == frais but eudy a small number .\
-Zovis XVI, tw 1374, coauded Hho |g them owned he” land Fhe culivale\
-Hroune & £ vom - _ (07 wa Owned by wobles, +he Chuvch\
-_ [nandal france was obrof ued. and other vider wewbers Of the Hird\
-pecawse ©) 4he war. i | ~].\
-_ france, Under Lous XN, helped BY — ‘3 iL “KA go) Cevtain\
-Hivieen Ame vican clowies +0 i Hoa h o boy Jogo ©\
-nde pendence from fovikata- i. \aKon © France vose from\
-Taxes Were Qncreased. +o meek ve gular ~The popula ons Sn 1315 +o 28 willfon\
-expenses, 8uch as the cost ©} SUSE about 23 tllion |\
-on army; the couvt, running alt tw 1489 rg 2 the.\
-Offa or uviversiHies: Ths led to a hai ners\
-fe coutny ©] Transe wes adsl BO demand for 0050\" od wot Fa\
-Hage estates An the dgtnencth coud” I Rodudten © am :\
-~The judal system was post of jie le Sh Fhe ed which was Hee\
-socieh, asfafes dated back 0 ge Hoe price of\
-Downloaded from www.padhie.in Downloaded from www.padhie.in\""
-
-console.log(transformToMarkdown(data));
