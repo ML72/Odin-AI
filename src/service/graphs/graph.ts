@@ -8,7 +8,7 @@ export class N {
     mastery: number;
     id: number;
 
-    constructor(title: string, body: string, weight: number, id: number) {
+    constructor(title: string, body: string, weight: number, id: number = -1) {
         this.title = title;
         this.body = body;
         this.weight = weight;
@@ -27,7 +27,7 @@ export class Edge {
     ground_truth: boolean;
     size: number;
 
-    constructor(title: string, weight: number, from: N, to: N, graph_id: number = -1, ground_truth: boolean = false, size: number) {
+    constructor(title: string, weight: number, from: N, to: N, graph_id: number = -1, ground_truth: boolean = false, size: number = 1) {
         this.connection = title;
         this.weight = weight;
         this.from = from;
@@ -64,7 +64,7 @@ export class Graph {
         console.log("Edges:");
         for (let edge of this.edges) {
             try {
-                console.log(`Edge from ${edge.from.title} to ${edge.to.title}, Graph ID: ${edge.graph_id}`);
+                console.log(`Edge from ${edge.from.title}, id: ${edge.from.id} to ${edge.to.title}, id: ${edge.to.id}, Graph ID: ${edge.graph_id}`);
                 console.log(`Edge weight ${edge.weight}`);
             }
             catch (error) {
