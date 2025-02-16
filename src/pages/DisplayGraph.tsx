@@ -55,11 +55,11 @@ const DisplayGraph: React.FC = () => {
 
     const result = chain_pipeline(graph);
 
-    setNewAlert(dispatch, { msg: "Generating personalized question...", alertType: "info" });
-
     if (result) {
       const { chain_list, chains } = result;
       const next_q = await gen_question(chain_list[0], chains[0]);
+      setNewAlert(dispatch, { msg: "Generating personalized question...", alertType: "info" });
+
       update_graph_weights(chains[0], graph, next_q['difficulty']);
       console.log(next_q);
       setQuestion({
@@ -67,7 +67,7 @@ const DisplayGraph: React.FC = () => {
         answerShown: false
       });
     } else {
-      setNewAlert(dispatch, { msg: "Failed to generate question", alertType: "error" });
+      setNewAlert(dispatch, { msg: "Failed to generate question, graph is too small", alertType: "error" });
     }
   };
 
@@ -252,20 +252,20 @@ const DisplayGraph: React.FC = () => {
                 </Button>
               </Grid>
             </Grid>
+
+            {/* Display generated question */}
+            {question && (
+              <Box sx={{ mt: 5, mb: 4 }}>
+                <Typography variant="h5"><strong>Personalized Quiz Question</strong></Typography>
+                <Typography variant="body1"><strong>Question:</strong> {question.question}</Typography>
+                {question.answerShown && <Typography variant="body1"><strong>Answer:</strong> {question.answer}</Typography>}
+                <Button variant="outlined" color='primary' sx={{ mt: 1 }} onClick={() => setQuestion({ ...question, answerShown: !question.answerShown })}>
+                  {question.answerShown ? "Hide Answer" : "Show Answer"}
+                </Button>
+              </Box>
+            )}
           </Grid>
         </Grid>
-
-        {/* Display generated question */}
-        {question && (
-          <Box sx={{ mt: 5, mb: 4 }}>
-            <Typography variant="h5"><strong>Personalized Quiz Question</strong></Typography>
-            <Typography variant="body1"><strong>Question:</strong> {question.question}</Typography>
-            {question.answerShown && <Typography variant="body1"><strong>Answer:</strong> {question.answer}</Typography>}
-            <Button variant="outlined" color='primary' sx={{ mt: 1 }} onClick={() => setQuestion({ ...question, answerShown: !question.answerShown })}>
-              {question.answerShown ? "Hide Answer" : "Show Answer"}
-            </Button>
-          </Box>
-        )}
       </Container>
     </CustomPage>
   )
