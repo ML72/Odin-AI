@@ -25,9 +25,6 @@ coverage
 # nyc test coverage
 .nyc_output
 
-# Large mp3 files for data that shouldn't be pushed
-src/data/*.mp3
-
 # Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
 

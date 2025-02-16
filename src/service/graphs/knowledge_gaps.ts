@@ -1,10 +1,4 @@
-import fs from "fs";
-import OpenAI from "openai";
-import dotenv from "dotenv";
 import { Edge, Graph, N } from "./graph";
-
-// Load environment variables
-dotenv.config();
 
 type AdjacencyList = {
     [key: number]: Edge[];
