@@ -87,9 +87,35 @@ async function constructSharedGraph(g1: Graph, g2: Graph) {
         mergedEdges.add(new Edge(edge.connection, edge.weight, newSource, newTarget, g2.id, true, 1));
     }
 
-    return new Graph(g1.nodes, Array.from(mergedEdges) as Edge[]);
+    for (let i = 0; i < g1.nodes.length; i++) {
+        g1.nodes[i].id = i;
+    }
+
+    const edgeList = Array.from(mergedEdges) as Edge[];
+
+    for (let i = 0; i < edgeList.length; i++) {
+        //find id of source and dest
+        for (const node of g1.nodes) {
+            if (edgeList[i].from.title == node.title) {
+                edgeList[i].from.id = node.id;
+            }
+            if (edgeList[i].to.title == node.title) {
+                edgeList[i].to.id = node.id;
+            }
+        }
+    }
+
+
+    return new Graph(g1.nodes, edgeList);
 }
 
+//identifying nodes that 
+// async function identifyImprovements(notes: Graph, lecture: Graph) {
+
+
+// }
+
+//More test cases
 
 const g1_nodes  = [
     new N("Taxation without representation", "", 0),
@@ -118,7 +144,7 @@ const g2_edges = [
 const g1 = new Graph(g1_nodes, g1_edges);
 const g2 = new Graph(g2_nodes, g2_edges);
 
-// const g3 = await constructSharedGraph(g1, g2);
-// g3.print();
+const g3 = await constructSharedGraph(g1, g2);
+g3.print();
 
 export default constructSharedGraph;

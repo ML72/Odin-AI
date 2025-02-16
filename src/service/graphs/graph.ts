@@ -71,7 +71,7 @@ export class Graph {
         console.log("Edges:");
         for (let edge of this.edges) {
             try {
-                console.log(`Edge from ${edge.from.title} to ${edge.to.title}, Graph ID: ${edge.graph_id}`);
+                console.log(`Edge from ${edge.from.title}, id: ${edge.from.id} to ${edge.to.title}, id: ${edge.to.id}, Graph ID: ${edge.graph_id}`);
                 console.log(`Edge weight ${edge.weight}`);
             }
             catch (error) {
