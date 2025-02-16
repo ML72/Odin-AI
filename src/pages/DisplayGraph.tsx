@@ -9,6 +9,7 @@ import Latex from 'react-latex-next';
 
 import CustomPage from '../components/CustomPage';
 import { setNewAlert } from '../service/alert';
+import { Graph, N, Edge } from '../service/graphs/graph';
 
 const DisplayGraph: React.FC = () => {
   const [nodes, setNodes] = useState<any>([]);
@@ -27,19 +28,63 @@ const DisplayGraph: React.FC = () => {
     history.push('/' + page);
   }
 
+  const generateGraph = (graph: Graph) => {
+    // Generate nodes
+    let nodeData = [];
+    for (let node of graph.nodes) {
+      let newNode = {
+        id: node.id.toString(),
+        label: node.title,
+        sublabel: node.body,
+      };
+      nodeData.push(newNode);
+    }
+
+    // Generate edges
+    let edgeData = [];
+    for (let edge of graph.edges) {
+      let newEdge = {
+        source: edge.from.id.toString(),
+        target: edge.to.id.toString(),
+        id: edge.from.id.toString() + '-' + edge.to.id.toString(),
+        label: edge.connection,
+        size: edge.size
+      };
+      edgeData.push(newEdge);
+    }
+
+    setNodes(nodeData);
+    setEdges(edgeData);
+  }
+
   // DEMO CODE TO SEE IF IT WORKS
   useEffect(() => {
-    setNodes(
+    // Load graph data
+    const sampleNodes = [
+      new N("Node 1", "This is the first node", 1),
+      new N("Node 2", "This is the second node", 1),
+      new N("Node 3", "This is the third node", 1)
+    ];
+
+    const sampleEdges = [
+      new Edge("Connection 1", 1, sampleNodes[0], sampleNodes[1], 0, false, 3),
+      new Edge("Connection 2", 1, sampleNodes[1], sampleNodes[2], 0, false, 6),
+      new Edge("Connection 3", 1, sampleNodes[0], sampleNodes[2], 0, false, 1)
+    ];
+
+    const sampleGraph = new Graph(sampleNodes, sampleEdges);
+    generateGraph(sampleGraph);
+    /*setNodes(
       [
         {
-            id: '1',
-            label: '1',
-            sublabel: "xxx yyy"
-          },
-          {
-            id: '2',
-            label: '2'
-          }
+          id: '1',
+          label: '1',
+          sublabel: "xxx yyy"
+        },
+        {
+          id: '2',
+          label: '2'
+        }
       ]);
     
     setEdges([
@@ -55,7 +100,7 @@ const DisplayGraph: React.FC = () => {
         id: '2-1',
         label: '2-1'
       }
-    ]);
+    ]);*/
       
   }, []);
 
@@ -81,11 +126,6 @@ const DisplayGraph: React.FC = () => {
       fill: '#C3B1FA',
       activeFill: '#BBD0FF',
     },
-    arrow: {
-      ...lightTheme.arrow,
-      fill: '#C3B1FA',
-      activeFill: '#BBD0FF',
-    }
   };
   
   return (
