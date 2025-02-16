@@ -4,10 +4,10 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
 import CustomPage from '../components/CustomPage';
+import { CustomLinearProgress } from '../components/Progress';
 import { setNewAlert } from '../service/alert';
 import { addNewGraph } from '../service/graph';
 import { handleUpload } from '../service/upload';
-import { Graph } from '../service/graphs/graph';
 
 const Upload: React.FC = () => {
   const dispatch = useDispatch();
@@ -155,6 +155,11 @@ const Upload: React.FC = () => {
             </Button>
           </Grid>
         </Grid>
+
+        { progress  > -1 &&
+          <CustomLinearProgress variant="determinate" value={progress} sx={{ my: 2 }} />
+        }
+
       </Container>
     </CustomPage>
   )
