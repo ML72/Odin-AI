@@ -3,9 +3,10 @@ import 'katex/dist/katex.min.css';
 import React, { useState, useEffect, useRef } from 'react';
 import { Button, Grid, Container, Typography, Box } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { GraphCanvas, lightTheme, nodeSizeProvider, useSelection } from 'reagraph';
+import { GraphCanvas, GraphCanvasRef, lightTheme, nodeSizeProvider, useSelection } from 'reagraph';
 import { useHistory, useParams } from 'react-router';
 import { selectGraphHistoryState } from '../store/slices/graph';
+import { chain_pipeline, gen_question, update_graph_weights } from '../service/external/quiz_gen';
 import Latex from 'react-latex-next';
 
 import CustomPage from '../components/CustomPage';
@@ -15,8 +16,10 @@ import { Graph, N, Edge } from '../service/graphs/graph';
 const DisplayGraph: React.FC = () => {
   const [nodes, setNodes] = useState<any>([]);
   const [edges, setEdges] = useState<any>([]);
+  const [adjNodes, setAdjNodes] = useState<any>([]);
   const [heading, setHeading] = useState<string>("Select a node to view details!");
   const [body, setBody] = useState<string>("Learn more about different topics and connections between topics by selecting nodes or edges.");
+  const [question, setQuestion] = useState<{ question: string, answer: string, difficulty: number, answerShown: boolean } | null>(null);
   const dispatch = useDispatch();
   const history = useHistory();
   const params: any = useParams();
@@ -25,10 +28,6 @@ const DisplayGraph: React.FC = () => {
   const edgeThreshold = 37.5;
 
   // Utility functions
-  const alertHandler = () => {
-    setNewAlert(dispatch, { msg: "Hello world!" });
-  }
-
   const changePage = (page: string) => {
     history.push('/' + page);
   }
@@ -51,6 +50,26 @@ const DisplayGraph: React.FC = () => {
       }
     }
   }
+
+  const handleGenerateQuestion = async (graph: Graph) => {
+
+    const result = chain_pipeline(graph);
+
+    setNewAlert(dispatch, { msg: "Generating personalized question...", alertType: "info" });
+
+    if (result) {
+      const { chain_list, chains } = result;
+      const next_q = await gen_question(chain_list[0], chains[0]);
+      update_graph_weights(chains[0], graph, next_q['difficulty']);
+      console.log(next_q);
+      setQuestion({
+        ...next_q,
+        answerShown: false
+      });
+    } else {
+      setNewAlert(dispatch, { msg: "Failed to generate question", alertType: "error" });
+    }
+  };
 
   const normalizeNodeWeights = (nodes: N[]) => {
     let max = 0;
@@ -82,7 +101,6 @@ const DisplayGraph: React.FC = () => {
     // Generate edges
     let edgeData = [];
     for (let edge of graph.edges) {
-      console.log(edge.weight);
       let newEdge = {
         source: edge.from.id.toString(),
         target: edge.to.id.toString(),
@@ -116,6 +134,16 @@ const DisplayGraph: React.FC = () => {
   const onClickNode = (node: any) => {
     setHeading(node.label);
     setBody(node.body);
+    setAdjNodes(edges.filter(
+      (edge: any) => edge.source === node.id || edge.target === node.id
+    ).map((edge: any) => {
+      const otherNodeId = edge.source === node.id ? edge.target : edge.source;
+      return {
+        toOrFrom: edge.source === node.id ? 'to' : 'from',
+        targetLabel: nodes.find((node: any) => node.id === otherNodeId)?.label,
+        label: edge.label
+      };
+    }));
     graphRef.current?.fitNodesInView([node.id]);
   }
 
@@ -189,20 +217,33 @@ const DisplayGraph: React.FC = () => {
           <Grid item xs={4}>
             {/* Display node details */}
             <Typography variant="h5">
-              {heading}
+              <strong>{heading}</strong>
             </Typography>
             <Typography variant="body1">
               <Latex>
                 {body}
               </Latex>
             </Typography>
-            {/* Display node details */}
+
+            {adjNodes.length > 0 && (
+              <Box sx={{ mt: 2 }}>
+                <Typography variant="body1"><strong>Connections</strong></Typography>
+                <ul>
+                  {adjNodes.map((adjNode: any, index: number) => (
+                    <li key={index}><Typography key={index} variant="body2">
+                      <em>{adjNode.targetLabel}</em> ({adjNode.toOrFrom}) &rarr; {adjNode.label} 
+                    </Typography>
+                    </li>
+                  ))}
+                </ul>
+              </Box>
+            )}
 
             {/* Buttons */}
             <Grid container spacing={2} sx={{ mt: 4 }}>
               <Grid item xs={6}>
-                <Button variant="contained" color='primary' fullWidth onClick={() => changePage('display/' + params.id + '/stats')}>
-                  View Analytics
+                <Button variant="contained" color='primary' fullWidth onClick={() => handleGenerateQuestion(graph.graph)}>
+                  Generate Question
                 </Button>
               </Grid>
               <Grid item xs={6}>
@@ -214,6 +255,17 @@ const DisplayGraph: React.FC = () => {
           </Grid>
         </Grid>
 
+        {/* Display generated question */}
+        {question && (
+          <Box sx={{ mt: 5, mb: 4 }}>
+            <Typography variant="h5"><strong>Personalized Quiz Question</strong></Typography>
+            <Typography variant="body1"><strong>Question:</strong> {question.question}</Typography>
+            {question.answerShown && <Typography variant="body1"><strong>Answer:</strong> {question.answer}</Typography>}
+            <Button variant="outlined" color='primary' sx={{ mt: 1 }} onClick={() => setQuestion({ ...question, answerShown: !question.answerShown })}>
+              {question.answerShown ? "Hide Answer" : "Show Answer"}
+            </Button>
+          </Box>
+        )}
       </Container>
     </CustomPage>
   )

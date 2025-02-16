@@ -15,7 +15,7 @@ const DisplayStats: React.FC = () => {
   return (
     <CustomPage>
       <Typography align="center" variant="body1" sx={{ mt: 3, mx: 2 }}>
-        This is the display stats page.
+        This is the display stats page. This is NOT currently used in this project, due to time constraints.
       </Typography>
       <Container sx={{ my: 3 }}>
         <Button variant="contained" fullWidth onClick={alertHandler}>

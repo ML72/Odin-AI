@@ -122,8 +122,8 @@ export class Graph {
         this.nodes.forEach((node: N, index: number) => nodeIndex.set(node, index));
     
         for (let edge of this.edges) {
-            let fromIndex = nodeIndex.get(edge.from);
-            let toIndex = nodeIndex.get(edge.to);
+            let fromIndex = edge.from.id;
+            let toIndex = edge.to.id;
             this.adj_matrix[fromIndex][toIndex] = edge.weight;
         }
     }
