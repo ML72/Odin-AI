@@ -8,12 +8,12 @@ export class N {
     mastery: number;
     id: number;
 
-    constructor(title : string, body: string, weight: number) {
+    constructor(title: string, body: string, weight: number, id: number) {
         this.title = title;
         this.body = body;
         this.weight = weight;
         this.mastery = 0;
-        this.id = 0;
+        this.id = id;
     }
 }
 
@@ -25,14 +25,16 @@ export class Edge {
     weight: number;
     graph_id: number;
     ground_truth: boolean;
+    size: number;
 
-    constructor(title: string, weight: number, from: N, to: N, graph_id: number = -1, ground_truth: boolean = false) {
+    constructor(title: string, weight: number, from: N, to: N, graph_id: number = -1, ground_truth: boolean = false, size: number) {
         this.connection = title;
         this.weight = weight;
         this.from = from;
         this.to = to;
         this.graph_id = graph_id;
         this.ground_truth = ground_truth;
+        this.size = size;
     }
 }
 
