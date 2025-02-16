@@ -1,18 +1,16 @@
-import fs from "fs";
 import OpenAI from "openai";
-import dotenv from "dotenv";
 import { Graph, Edge, N } from './graph';
 
-// Load environment variables
-dotenv.config();
+import { OPENAI_API_KEY } from "../../../keys";
+
 
 // Load the OpenAI API key from the environment
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
+    apiKey: OPENAI_API_KEY,
+    dangerouslyAllowBrowser: true
 });
 
-//Embeddings
-
+// Embeddings
 async function getEmbedding(keyword: string) {
     try {
       const embedding = await openai.embeddings.create({
@@ -43,17 +41,8 @@ async function combineKeywords(k1: string, k2: string) {
     return similarity > 0.9;
 }
 
-//test cases
-// console.log(await combineKeywords('color', 'colour'));
-//Graph combinations
-
-
-// console.log(await combineKeywords('Taxation with no representation', 'Taxation without representation'));
-// console.log(g1_nodes[0].title + " " + g2_nodes[2].title);
-// console.log(await combineKeywords(g1_nodes[0].title, g2_nodes[2].title))
-
-//taking in two of your own lecture notes and overlaying them 
-async function constructSharedGraph(g1: Graph, g2: Graph) {
+// Taking in two of your own lecture notes and overlaying them 
+export async function constructSharedGraph(g1: Graph, g2: Graph) {
     const nodeMap = new Map();
     const mergedEdges = new Set(g1.edges); 
 
@@ -108,43 +97,3 @@ async function constructSharedGraph(g1: Graph, g2: Graph) {
 
     return new Graph(g1.nodes, edgeList);
 }
-
-//identifying nodes that 
-// async function identifyImprovements(notes: Graph, lecture: Graph) {
-
-
-// }
-
-//More test cases
-
-const g1_nodes  = [
-    new N("Taxation without representation", "", 0),
-    new N("Sugar Act", "", 0),
-    new N("Stamp Act", "", 0),
-]
-
-const g2_nodes = [
-    new N("Great Britain", "", 0),
-    new N("American Revolution", "", 1),
-    new N("Taxation with no representation", "", 1),
-    new N("Declaration of Independence", "", 0)
-]
-
-const g1_edges = [
-    new Edge("Led to grievances from colonists", 0, g1_nodes[0], g1_nodes[1]),
-    new Edge("Led to grievances from colonists", 0, g1_nodes[0], g1_nodes[2]),
-]
-
-const g2_edges = [
-    new Edge("They lost in this battle", 0, g2_nodes[0], g2_nodes[1]),
-    new Edge("Root cause of conflict", 0, g2_nodes[2], g2_nodes[1]),
-    new Edge("Explicitly addressed in document", 0, g2_nodes[1], g2_nodes[3]),
-]
-
-const g1 = new Graph(g1_nodes, g1_edges);
-const g2 = new Graph(g2_nodes, g2_edges);
-
-const g3 = await constructSharedGraph(g1, g2);
-g3.print();
-
-export default constructSharedGraph;
