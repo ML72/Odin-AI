@@ -87,9 +87,11 @@ export async function constructSharedGraph(g1: Graph, g2: Graph) {
         for (const node of g1.nodes) {
             if (edgeList[i].from.title == node.title) {
                 edgeList[i].from.id = node.id;
+                node.degree += 1;
             }
             if (edgeList[i].to.title == node.title) {
                 edgeList[i].to.id = node.id;
+                node.degree += 1;
             }
         }
     }

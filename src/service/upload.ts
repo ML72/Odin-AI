@@ -2,6 +2,7 @@ import { transcribeAudio } from "./external/transcribeAudio";
 import { handwrittenToText } from "./external/transcribeWritten";
 import { transformToMarkdown } from "./external/markdownTransform";
 import { graph_gen } from "./external/generate_concepts";
+import { Graph } from "./graphs/graph";
 import { constructSharedGraph } from "./graphs/combine_graphs";
 import { knowledgeGaps } from "./graphs/knowledge_gaps";
 
@@ -43,27 +44,26 @@ export const handleUpload = async (selectedUserPngFile: any, selectedMp3File: an
     if (userMarkdown) {
         userGraph = await graph_gen(userMarkdown);
     }
+    else {
+        userGraph = new Graph([], []);
+    }
     updateProgress(70);
 
     if (audioMarkdown) {
         audioGraph = await graph_gen(audioMarkdown);
     }
+    else {
+        audioGraph = new Graph([], []);
+    }
     updateProgress(80);
 
-    // Step 4: Combine graphs, if applicable
-    let finalGraph: any = null;
-    if (userGraph == null || audioGraph == null) {
-        finalGraph = userGraph == null ? audioGraph : userGraph;
-    } else {
-        finalGraph = await constructSharedGraph(userGraph, audioGraph);
-    }
+    // Step 4: Combine graphs
+    let finalGraph = await constructSharedGraph(userGraph, audioGraph);
     
     updateProgress(90);
 
     // Step 5: Retrieve knowledge gaps
-    if (finalGraph != null) {
-        finalGraph = await knowledgeGaps(finalGraph);
-    }
+    finalGraph = await knowledgeGaps(finalGraph);
 
     console.log("Final graph:");
     console.log(finalGraph);
