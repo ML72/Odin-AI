@@ -8,14 +8,14 @@ type AdjacencyList = {
 
 let n: number;
 let capacity: number[][];
-let adj: number[][];
+let adj: AdjacencyList;
 let topFiveNodes = new Set<number>();
 
 function bfs(s: N, t: N, parent: number[]): number {
     parent.fill(-1);
-    parent[s] = -2;
+    parent[s.id] = -2;
     
-    const queue: [number, number][] = [[s, INF]];
+    const queue: [number, number][] = [[s.id, INF]];
     
     while (queue.length > 0) {
         const [cur, flow] = queue.shift()!;
