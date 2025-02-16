@@ -1,10 +1,4 @@
-import fs from "fs";
-import OpenAI from "openai";
-import dotenv from "dotenv";
 import { Edge, Graph, N } from "./graph";
-
-// Load environment variables
-dotenv.config();
 
 type AdjacencyList = {
     [key: number]: Edge[];
@@ -50,22 +44,3 @@ export const knowledgeGaps = async (graph: Graph) => {
     
     return new Graph(node_map, personal_edges);
 }
-/*
-const g1_nodes  = [
-    new N("Taxation without representation", "", 1, 0),
-    new N("Sugar Act", "", 1, 1),
-    new N("Stamp Act", "", 2, 2),
-]
-
-const g1_edges = [
-    new Edge("Led to grievances from colonists1", 2, g1_nodes[0], g1_nodes[1], 1, true, 1),
-    new Edge("Led to grievances from colonists", 3, g1_nodes[0], g1_nodes[2], 1, true, 1),
-    new Edge("Led to grievances from colonists", 3, g1_nodes[0], g1_nodes[2], 1, false, 1)
-]
-
-const graph = new Graph(
-    g1_nodes, g1_edges
-);
-
-const g3 = await knowledge_gaps(graph);
-g3.print();*/

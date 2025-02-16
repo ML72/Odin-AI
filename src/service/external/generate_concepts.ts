@@ -1,16 +1,14 @@
-import fs from "fs";
 import OpenAI from "openai";
-import dotenv from "dotenv";
 import { Graph, Edge, N } from '../graphs/graph';
-import constructSharedGraph from '../graphs/combine_graphs';
 import { bleuScore } from '../graphs/node_weight';
 
-// Load environment variables
-dotenv.config();
+import { OPENAI_API_KEY } from "../../../keys";
+
 
 // Load the OpenAI API key from the environment
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
+    apiKey: OPENAI_API_KEY,
+    dangerouslyAllowBrowser: true
 });
 
 
@@ -46,7 +44,6 @@ async function generateNodes(markdown_text: string) {
         ]
     });
 
-    console.log(node_gen.choices[0].message.content)
     return node_gen.choices[0].message.content;
 }
 
@@ -55,12 +52,6 @@ export const generateEdges = async (
     markdown_text: string,
     node_list: string
 ) => {
-
-    // let node_titles = "";
-    // for (const node of node_list) {
-    //     node_titles += node.title + ", ";
-    // }
-    // console.log(node_titles);
 
     const concept_list = await openai.chat.completions.create({
         model: "gpt-4o-mini",
@@ -82,7 +73,6 @@ export const generateEdges = async (
         ]
     });
 
-    console.log(concept_list.choices[0].message.content)
     return concept_list.choices[0].message.content;
 };
 
@@ -92,7 +82,7 @@ function extractCode(input: string) {
 }
 
 
-async function graph_gen(markdown_text: string) {
+export async function graph_gen(markdown_text: string) {
     const node_set: any = await generateNodes(markdown_text);
     const node_list = extractCode(node_set);
 
@@ -109,8 +99,6 @@ async function graph_gen(markdown_text: string) {
     const node_titles = Object.keys(node_data);
     const node_list_str = node_titles.join(", ");
     
-    console.log(node_list_str);
-
     const llm_graph: any = await generateEdges(markdown_text, node_list_str);
     const json_graph = extractCode(llm_graph);
 
@@ -141,50 +129,9 @@ async function graph_gen(markdown_text: string) {
             edges.push(edge);
         }
     }
-    
-    return new Graph([...nodes.values()], edges);
+
+    const g: Graph = new Graph([...nodes.values()], edges);
+    console.log(g);
+
+    return g;
 }
-
-const markdown_file1 = `
-# The American Revolution (1775-1783)
-
-## Introduction
-The American Revolution was a political and military struggle between the thirteen American colonies and Great Britain. It resulted in the establishment of the United States of America as an independent nation. The conflict was fueled by grievances over taxation, lack of representation, and British control over colonial affairs.
-`
-
-const markdown_file2 = `
-## American Revolution
-
-The American Revolution was a pivotal moment in history, marking the colonies' break from Great Britain. Frustrations over British policies and governance fueled the desire for independence, leading to a prolonged conflict that reshaped the future of North America.
-`
-
-
-const g1 = await graph_gen(markdown_file1);
-
-// if (g1) {
-//     g1.print();
-// }
-// else {
-//     console.log("g1 is null");
-// }
-// /*
-
-const g2 = await graph_gen(markdown_file2);
-
-if (g1 && g2) {
-    g1.print();
-    g2.print();
-
-    const g3 = await constructSharedGraph(g1, g2);
-    g3.print();
-    g3.saveToFile('graph_save.json');
-
-    const loadedGraph = Graph.loadFromFile('graph_save.json');
-    loadedGraph.print();
-}
-else {
-    console.log("one of the graphs is null")
-}
-//    */
-
-export default generateEdges;

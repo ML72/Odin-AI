@@ -1,6 +1,9 @@
 import { transcribeAudio } from "./external/transcribeAudio";
 import { handwrittenToText } from "./external/transcribeWritten";
 import { transformToMarkdown } from "./external/markdownTransform";
+import { graph_gen } from "./external/generate_concepts";
+import { constructSharedGraph } from "./graphs/combine_graphs";
+import { knowledgeGaps } from "./graphs/knowledge_gaps";
 
 
 // The god function which does the WHOLE upload pipeline :)
@@ -34,14 +37,41 @@ export const handleUpload = async (selectedUserPngFile: any, selectedMp3File: an
     updateProgress(60);
 
     // Step 3: Generate separate graphs
+    let userGraph: any = null;
+    let audioGraph: any = null;
 
-    
+    if (userMarkdown) {
+        userGraph = await graph_gen(userMarkdown);
+    }
+    updateProgress(70);
+
+    if (audioMarkdown) {
+        audioGraph = await graph_gen(audioMarkdown);
+    }
+    updateProgress(80);
+
     // Step 4: Combine graphs, if applicable
-
+    let finalGraph: any = null;
+    if (userGraph == null || audioGraph == null) {
+        finalGraph = userGraph == null ? audioGraph : userGraph;
+    } else {
+        finalGraph = await constructSharedGraph(userGraph, audioGraph);
+    }
     
-    // Step 5: Retrieve stats
+    updateProgress(90);
+
+    // Step 5: Retrieve knowledge gaps
+    if (finalGraph != null) {
+        finalGraph = await knowledgeGaps(finalGraph);
+    }
+
+    console.log("Final graph:");
+    console.log(finalGraph);
+    updateProgress(95);
     
+    // Step 6: Retrieve stats
+    let stats: any = {} // TODO later
+    const name = "Graph " + new Date().toISOString();
 
-
-    return ["myname", null, {}];
+    return [name, finalGraph, stats];
 }
