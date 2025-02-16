@@ -6,6 +6,7 @@ export class N {
     title: string;
     body: string
     weight: number;
+    freq: number;
     id: number;
     degree: number;
 
@@ -14,6 +15,7 @@ export class N {
         this.body = body;
         this.weight = weight;
         this.id = 0;
+        this.freq = 0; //frequency in the markdown text
         this.degree = degree;
     }
 

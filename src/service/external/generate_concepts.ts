@@ -3,6 +3,7 @@ import OpenAI from "openai";
 import dotenv from "dotenv";
 import { Graph, Edge, N } from '../graphs/graph.ts';
 import constructSharedGraph from '../graphs/combine_graphs.ts';
+import { bleuScore } from '../graphs/node_weight.ts';
 
 // Load environment variables
 dotenv.config();
@@ -12,40 +13,6 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
 });
 
-
-/*
-to-do graph wise:
-
-code work:
-- manual node gen through stripping markdown for relevant pieces
-- verify gpt output: every node must occur in the document
-- node "size": tf idf
-
-- openai pipelining: 
-    - node additional info
-    - unidirectional
-    - edge weights
-    - parse openai output into an actual graph format
-
-done:
-
-- combine two graphs
-- address 'spelling mistakes' - kinda done by gpt alr
-
-
-end goal of graph:
-
-'title': {
-        'id': 0
-        'weight': (tf idf)
-        'edges': {'node' : 'connection' }
-        }
-
-convert to:
-node: {title ..}
-
-edges: [node][node] -- item is weight
-*/
 
 async function extractBoldTerms(markdown: string) {
     const boldPattern = /\*\*(.*?)\*\*/g;
@@ -124,6 +91,7 @@ function extractCode(input: string) {
     return match ? match[1].trim() : "";
 }
 
+
 async function graph_gen(markdown_text: string) {
     const node_set = await generateNodes(markdown_text);
     const node_list = extractCode(node_set);
@@ -159,8 +127,9 @@ async function graph_gen(markdown_text: string) {
     let edges = [];
     
     for (const [nodeTitle, nodeData] of Object.entries(data)) {
-        const node_body = node_data[nodeTitle];
-        let node = new N(nodeTitle, node_body, 0);
+        let node = new N(nodeTitle, node_data[nodeTitle], 0);
+        node.freq = bleuScore(markdown_text, node.title);
+
         nodes.set(nodeTitle, node);
         
         for (const edgeData of nodeData.edges) {
