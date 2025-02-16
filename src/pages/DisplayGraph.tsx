@@ -3,7 +3,7 @@ import 'katex/dist/katex.min.css';
 import React, { useState, useEffect, useRef } from 'react';
 import { Button, Grid, Container, Typography, Box } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { GraphCanvas, lightTheme, nodeSizeProvider } from 'reagraph';
+import { GraphCanvas, lightTheme, nodeSizeProvider, useSelection } from 'reagraph';
 import { useHistory, useParams } from 'react-router';
 import { selectGraphHistoryState } from '../store/slices/graph';
 import Latex from 'react-latex-next';
@@ -95,15 +95,7 @@ const DisplayGraph: React.FC = () => {
     setEdges(edgeData);
   }
 
-  const onClickNode = (node: any) => {
-    setHeading(node.label);
-    setBody(node.body);
-    const graphRef = useRef<GraphCanvasRef | null>(null);
-    const fitView = () => {
-      graphRef.current?.fitNodesInView([node.id]);
-    };
-  }
-
+  
   const allGraphs = useSelector(selectGraphHistoryState);
   const graph = allGraphs.find((graph: any) => graph.id == params.id);
   if (!graph) {
@@ -111,12 +103,20 @@ const DisplayGraph: React.FC = () => {
     history.push('');
   }
 
+  const graphRef = useRef<GraphCanvasRef | null>(null);
+
   // Generate graph once component is mounted
   useEffect(() => {
     //normalizeEdgeWeights(graph.graph.edges);
     //normalizeNodeWeights(graph.graph.nodes);
     generateGraph(graph.graph);      
   }, []);
+
+  const onClickNode = (node: any) => {
+    setHeading(node.label);
+    setBody(node.body);
+    graphRef.current?.fitNodesInView([node.id]);
+  }
 
   // Define graph theme
   const THEME_COLOR = '#9674FF';
@@ -129,10 +129,10 @@ const DisplayGraph: React.FC = () => {
     node: {
       ...lightTheme.node,
       fill: THEME_COLOR,
-      activeFill: '#BBD0FF',
+      activeFill: '#90EE90',
       label: {
         color: THEME_COLOR,
-        activeColor: '#BBD0FF',
+        activeColor: '#9674FF',
       },
     },
     edge: {
@@ -175,6 +175,7 @@ const DisplayGraph: React.FC = () => {
                 edges={edges}
                 theme={graphTheme}
                 onNodeClick={onClickNode}
+                ref={graphRef}
               />
             </Box>
           </Grid>
