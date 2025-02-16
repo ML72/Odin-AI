@@ -10,7 +10,7 @@ type AdjacencyList = {
     [key: number]: Edge[];
 };
 
-export const knowledge_gaps = async (graph: Graph) => {
+export const knowledgeGaps = async (graph: Graph) => {
     const node_map: N[] = graph.nodes;
     const your_understanding_list: AdjacencyList = {};
     const ground_truth_list: AdjacencyList = {};
