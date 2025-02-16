@@ -1,0 +1,825 @@
+{
+  "nodes": [
+    {
+      "title": "American Revolution",
+      "body": "",
+      "weight": 0,
+      "mastery": 0,
+      "id": 0,
+      "degree": 0
+    },
+    {
+      "title": "Thirteen American Colonies",
+      "body": "",
+      "weight": 0,
+      "mastery": 0,
+      "id": 0,
+      "degree": 0
+    },
+    {
+      "title": "Great Britain",
+      "body": "",
+      "weight": 0,
+      "mastery": 0,
+      "id": 0,
+      "degree": 0
+    },
+    {
+      "title": "United States of America",
+      "body": "",
+      "weight": 0,
+      "mastery": 0,
+      "id": 0,
+      "degree": 0
+    },
+    {
+      "title": "Political Struggle",
+      "body": "",
+      "weight": 0,
+      "mastery": 0,
+      "id": 0,
+      "degree": 0
+    },
+    {
+      "title": "Military Struggle",
+      "body": "",
+      "weight": 0,
+      "mastery": 0,
+      "id": 0,
+      "degree": 0
+    },
+    {
+      "title": "Taxation",
+      "body": "",
+      "weight": 0,
+      "mastery": 0,
+      "id": 0,
+      "degree": 0
+    },
+    {
+      "title": "Lack of Representation",
+      "body": "",
+      "weight": 0,
+      "mastery": 0,
+      "id": 0,
+      "degree": 0
+    },
+    {
+      "title": "British Control",
+      "body": "",
+      "weight": 0,
+      "mastery": 0,
+      "id": 0,
+      "degree": 0
+    },
+    {
+      "title": "Independent Nation",
+      "body": "",
+      "weight": 0,
+      "mastery": 0,
+      "id": 0,
+      "degree": 0
+    },
+    {
+      "title": "Colonies",
+      "body": "",
+      "weight": 0,
+      "mastery": 0,
+      "id": 0,
+      "degree": 0
+    },
+    {
+      "title": "Frustrations",
+      "body": "",
+      "weight": 0,
+      "mastery": 0,
+      "id": 0,
+      "degree": 0
+    },
+    {
+      "title": "Desire for Independence",
+      "body": "",
+      "weight": 0,
+      "mastery": 0,
+      "id": 0,
+      "degree": 0
+    },
+    {
+      "title": "Prolonged Conflict",
+      "body": "",
+      "weight": 0,
+      "mastery": 0,
+      "id": 0,
+      "degree": 0
+    },
+    {
+      "title": "Future of North America",
+      "body": "",
+      "weight": 0,
+      "mastery": 0,
+      "id": 0,
+      "degree": 0
+    },
+    {
+      "title": "British Policies",
+      "body": "",
+      "weight": 0,
+      "mastery": 0,
+      "id": 0,
+      "degree": 0
+    },
+    {
+      "title": "Governance",
+      "body": "",
+      "weight": 0,
+      "mastery": 0,
+      "id": 0,
+      "degree": 0
+    }
+  ],
+  "edges": [
+    {
+      "connection": "The American Revolution was initiated by the Thirteen American Colonies seeking independence from British rule.",
+      "from": {
+        "title": "American Revolution",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Thirteen American Colonies",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.9,
+      "graph_id": 2,
+      "color": 16711680
+    },
+    {
+      "connection": "The conflict was primarily against Great Britain, which ruled over the colonies.",
+      "from": {
+        "title": "American Revolution",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Great Britain",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.95,
+      "graph_id": 2,
+      "color": 16711680
+    },
+    {
+      "connection": "The ultimate outcome of the American Revolution was the establishment of the United States of America.",
+      "from": {
+        "title": "American Revolution",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "United States of America",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 1,
+      "graph_id": 2,
+      "color": 16711680
+    },
+    {
+      "connection": "The American Revolution represented a significant political struggle for independence and self-governance.",
+      "from": {
+        "title": "American Revolution",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Political Struggle",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.85,
+      "graph_id": 2,
+      "color": 16711680
+    },
+    {
+      "connection": "The American Revolution involved a military struggle between the colonies and British forces.",
+      "from": {
+        "title": "American Revolution",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Military Struggle",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.8,
+      "graph_id": 2,
+      "color": 16711680
+    },
+    {
+      "connection": "The Thirteen American Colonies were dissatisfied with British taxation policies, which led to growing unrest.",
+      "from": {
+        "title": "Thirteen American Colonies",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Taxation",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.8,
+      "graph_id": 2,
+      "color": 16711680
+    },
+    {
+      "connection": "The lack of representation in British Parliament contributed to the colonies' desire for independence.",
+      "from": {
+        "title": "Thirteen American Colonies",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Lack of Representation",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.85,
+      "graph_id": 2,
+      "color": 16711680
+    },
+    {
+      "connection": "The British control over colonial affairs was a key factor that motivated the colonies to rebel.",
+      "from": {
+        "title": "Thirteen American Colonies",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "British Control",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.9,
+      "graph_id": 2,
+      "color": 16711680
+    },
+    {
+      "connection": "Great Britain's imposition of taxes on the colonies without representation led to increased tensions.",
+      "from": {
+        "title": "Great Britain",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Taxation",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.9,
+      "graph_id": 2,
+      "color": 16711680
+    },
+    {
+      "connection": "Britain's control over colonial matters was resented by the colonists and was a catalyst for revolution.",
+      "from": {
+        "title": "Great Britain",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "British Control",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.95,
+      "graph_id": 2,
+      "color": 16711680
+    },
+    {
+      "connection": "The establishment of the United States of America marked the successful creation of an independent nation.",
+      "from": {
+        "title": "United States of America",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Independent Nation",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 1,
+      "graph_id": 2,
+      "color": 16711680
+    },
+    {
+      "connection": "Taxation without representation became a rallying cry for the revolutionaries.",
+      "from": {
+        "title": "Taxation",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Lack of Representation",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.75,
+      "graph_id": 2,
+      "color": 16711680
+    },
+    {
+      "connection": "The lack of representation was one of the main issues driving the political struggle during the revolution.",
+      "from": {
+        "title": "Lack of Representation",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Political Struggle",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.85,
+      "graph_id": 2,
+      "color": 16711680
+    },
+    {
+      "connection": "British control over colonial affairs was met with military resistance during the revolution.",
+      "from": {
+        "title": "British Control",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Military Struggle",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.8,
+      "graph_id": 2,
+      "color": 16711680
+    },
+    {
+      "connection": "The American Revolution involved the colonies seeking independence from British rule.",
+      "from": {
+        "title": "American Revolution",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Colonies",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.9,
+      "graph_id": 3,
+      "color": 16711680
+    },
+    {
+      "connection": "The American Revolution marked the colonies' break from Great Britain.",
+      "from": {
+        "title": "American Revolution",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Great Britain",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.95,
+      "graph_id": 3,
+      "color": 16711680
+    },
+    {
+      "connection": "The American Revolution was fueled by frustrations over British governance.",
+      "from": {
+        "title": "American Revolution",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Frustrations",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.8,
+      "graph_id": 3,
+      "color": 16711680
+    },
+    {
+      "connection": "The American Revolution represented the colonies' desire for independence from Great Britain.",
+      "from": {
+        "title": "American Revolution",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Desire for Independence",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.9,
+      "graph_id": 3,
+      "color": 16711680
+    },
+    {
+      "connection": "The desire for independence led to a prolonged conflict during the American Revolution.",
+      "from": {
+        "title": "American Revolution",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Prolonged Conflict",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.85,
+      "graph_id": 3,
+      "color": 16711680
+    },
+    {
+      "connection": "The outcome of the American Revolution significantly reshaped the future of North America.",
+      "from": {
+        "title": "American Revolution",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Future of North America",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.9,
+      "graph_id": 3,
+      "color": 16711680
+    },
+    {
+      "connection": "The colonies developed a strong desire for independence from British control.",
+      "from": {
+        "title": "Colonies",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Desire for Independence",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.85,
+      "graph_id": 3,
+      "color": 16711680
+    },
+    {
+      "connection": "The colonies' actions during the American Revolution resulted in a prolonged conflict with Great Britain.",
+      "from": {
+        "title": "Colonies",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Prolonged Conflict",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.8,
+      "graph_id": 3,
+      "color": 16711680
+    },
+    {
+      "connection": "Great Britain's policies led to significant frustrations among the colonies.",
+      "from": {
+        "title": "Great Britain",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Frustrations",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.9,
+      "graph_id": 3,
+      "color": 16711680
+    },
+    {
+      "connection": "The conflict with Great Britain became prolonged due to the colonies’ desire for independence.",
+      "from": {
+        "title": "Great Britain",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Prolonged Conflict",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.85,
+      "graph_id": 3,
+      "color": 16711680
+    },
+    {
+      "connection": "Frustrations were largely fueled by discontent with British policies towards the colonies.",
+      "from": {
+        "title": "Frustrations",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "British Policies",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.9,
+      "graph_id": 3,
+      "color": 16711680
+    },
+    {
+      "connection": "Frustrations contributed to the growing desire for independence among the colonies.",
+      "from": {
+        "title": "Frustrations",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Desire for Independence",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.8,
+      "graph_id": 3,
+      "color": 16711680
+    },
+    {
+      "connection": "British policies were a major source of frustration that galvanized colonial sentiment.",
+      "from": {
+        "title": "British Policies",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Frustrations",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.85,
+      "graph_id": 3,
+      "color": 16711680
+    },
+    {
+      "connection": "The governance approach taken by Great Britain influenced the frustrations of the colonies.",
+      "from": {
+        "title": "Governance",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Frustrations",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.75,
+      "graph_id": 3,
+      "color": 16711680
+    },
+    {
+      "connection": "The desire for independence fueled the lengthy conflict during the American Revolution.",
+      "from": {
+        "title": "Desire for Independence",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Prolonged Conflict",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.9,
+      "graph_id": 3,
+      "color": 16711680
+    },
+    {
+      "connection": "The colonies' desire for independence ultimately reshaped the future of North America.",
+      "from": {
+        "title": "Desire for Independence",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Future of North America",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.85,
+      "graph_id": 3,
+      "color": 16711680
+    },
+    {
+      "connection": "The prolonged conflict of the American Revolution had lasting impacts on the future of North America.",
+      "from": {
+        "title": "Prolonged Conflict",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "to": {
+        "title": "Future of North America",
+        "body": "",
+        "weight": 0,
+        "mastery": 0,
+        "id": 0,
+        "degree": 0
+      },
+      "weight": 0.9,
+      "graph_id": 3,
+      "color": 16711680
+    }
+  ],
+  "id": 4
+}
