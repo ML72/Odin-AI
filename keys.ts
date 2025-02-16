@@ -1,0 +1,2 @@
+// DO NOT GIT COMMIT CHANGES TO THIS FILE
+export const OPENAI_API_KEY = 'null';

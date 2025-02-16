@@ -54,7 +54,11 @@ const Upload: React.FC = () => {
       // Submit the form
       setProgress(0);
       setNewAlert(dispatch, { msg: "Your data is being processed, please wait...", alertType: "success" });
-      let [graphName, graphData, graphStats]: any = await handleUpload(selectedUserPngFile, selectedMp3File, setProgress);
+      let [graphName, graphData, graphStats]: any = await handleUpload(
+        selectedUserPngFile,
+        selectedMp3File,
+        setProgress
+      );
 
       // Save to redux
       const id = addNewGraph(dispatch, { name: graphName, graph: graphData, stats: graphStats });
