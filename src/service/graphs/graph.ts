@@ -10,7 +10,7 @@ export class N {
     degree: number;
     id: number;
     
-    constructor(title: string, body: string, weight: number, id: number, degree: number = 0) {
+    constructor(title: string, body: string, weight: number, id: number = -1, degree: number = 0) {
         this.title = title;
         this.body = body;
         this.weight = weight;
@@ -34,7 +34,7 @@ export class Edge {
     ground_truth: boolean;
     size: number;
 
-    constructor(title: string, weight: number, from: N, to: N, graph_id: number = -1, ground_truth: boolean = false, size: number) {
+    constructor(title: string, weight: number, from: N, to: N, graph_id: number = -1, ground_truth: boolean = false, size: number = 1) {
         this.connection = title;
         this.weight = weight;
         this.from = from;
