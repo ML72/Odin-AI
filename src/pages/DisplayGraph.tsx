@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { GraphCanvas, lightTheme, nodeSizeProvider, useSelection } from 'reagraph';
 import { useHistory, useParams } from 'react-router';
 import { selectGraphHistoryState } from '../store/slices/graph';
+import { chain_pipeline, gen_question, update_graph_weights } from '../service/external/quiz_gen';
 import Latex from 'react-latex-next';
 
 import CustomPage from '../components/CustomPage';
@@ -17,6 +18,7 @@ const DisplayGraph: React.FC = () => {
   const [edges, setEdges] = useState<any>([]);
   const [heading, setHeading] = useState<string>("Select a node to view details!");
   const [body, setBody] = useState<string>("Learn more about different topics and connections between topics by selecting nodes or edges.");
+  const [question, setQuestion] = useState<{ question: string, answer: string, difficulty: number } | null>(null);
   const dispatch = useDispatch();
   const history = useHistory();
   const params: any = useParams();
@@ -50,6 +52,20 @@ const DisplayGraph: React.FC = () => {
       }
     }
   }
+
+  const handleGenerateQuestion = async (graph: Graph) => {
+
+    const result = chain_pipeline(graph);
+
+    if (result) {
+      const { chain_list, chains } = result;
+      const next_q = await gen_question(chain_list[0], chains[0]);
+      update_graph_weights(chains[0], graph, next_q['difficulty']);
+      setQuestion(next_q);
+    } else {
+      setNewAlert(dispatch, { msg: "Failed to generate question", alertType: "error" });
+    }
+  };
 
   const normalizeNodeWeights = (nodes: N[]) => {
     let max = 0;
@@ -209,10 +225,22 @@ const DisplayGraph: React.FC = () => {
                   Home
                 </Button>
               </Grid>
+              <Grid item xs={12}>
+                <Button variant="contained" color='secondary' fullWidth onClick={() => handleGenerateQuestion(graph.graph)}>
+                  Generate Question
+                </Button>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
-
+        {question && (
+          <Box sx={{ mt: 4 }}>
+            <Typography variant="h5">Generated Question</Typography>
+            <Typography variant="body1">Question: {question.question}</Typography>
+            <Typography variant="body1">Answer: {question.answer}</Typography>
+            <Typography variant="body1">Difficulty: {question.difficulty}</Typography>
+          </Box>
+        )}
       </Container>
     </CustomPage>
   )

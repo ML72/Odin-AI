@@ -1,15 +1,15 @@
 import OpenAI from "openai";
-import dotenv from "dotenv";
 import { Graph, Edge, N } from './../graphs/graph';
 import { constructSharedGraph } from './../graphs/combine_graphs';
 
-dotenv.config();
+import { OPENAI_API_KEY } from "../../../keys";
 
 async function prompt_gpt(message) {
+// Load the OpenAI API key from the environment
     const openai = new OpenAI({
-        apiKey: process.env.OPENAI_API_KEY
+        apiKey: OPENAI_API_KEY,
+        dangerouslyAllowBrowser: true
     });
-
 
     const concept_list = await openai.chat.completions.create({
         model: "gpt-4o-mini",
@@ -130,7 +130,12 @@ function extract_json(text: string) {
     return node_data;
 }
 
-function chain_pipeline(g: Graph) {
+export function chain_pipeline(g2: Graph) {
+    console.log(typeof(g2));
+    console.log(g2);
+    
+    const g = new Graph(g2.nodes, g2.edges);
+    console.log(g);
     g.build_adjacency_matrix();
         
     // Get a chain using our updated chain_synthesis function
@@ -169,7 +174,7 @@ function chain_pipeline(g: Graph) {
     return { chain_list, chains };
 } 
 
-async function gen_question(chain_list: any, chain: any) {
+export async function gen_question(chain_list: any, chain: any) {
 
     const random_difficulty = Math.floor(Math.random() * 4) + 1;
 
@@ -215,7 +220,7 @@ async function gen_question(chain_list: any, chain: any) {
         "chain": nodes + edges that make up question
     }
 */
-function update_graph_weights(next_q: any, g: Graph, difficulty: number) {
+export function update_graph_weights(next_q: any, g: Graph, difficulty: number) {
     for (const edge of next_q.edges) {
         g.edges[edge.id].weight *= 1/(difficulty/2 + 1)
     }
@@ -237,7 +242,7 @@ function update_graph_weights(next_q: any, g: Graph, difficulty: number) {
 //     new Edge("This led to grievances from colonists", 1.5, g2_nodes[2], g2_nodes[4], 3)
 // ]
 
-// //const g1 = new Graph(g1_nodes, g1_edges);
+// // //const g1 = new Graph(g1_nodes, g1_edges);
 // const g1 = new Graph(g2_nodes, g2_edges);
 // const g2 = await constructSharedGraph(g1, new Graph([], []));
 
