@@ -20,15 +20,9 @@ const DisplayGraph: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const params: any = useParams();
-
-  // Select graph history state
-  // Return to home and throw error if graph does not exist
-  const allGraphs = useSelector(selectGraphHistoryState);
-  const graph = allGraphs.find((graph: any) => graph.id == params.id);
-  if (!graph) {
-    setNewAlert(dispatch, { msg: "Graph " + params.id + " not found!", alertType: "error" });
-    history.push('');
-  }
+  const fudge = 10;
+  const edgeFudge = 25;
+  const edgeThreshold = 37.5;
 
   // Utility functions
   const alertHandler = () => {
@@ -39,13 +33,47 @@ const DisplayGraph: React.FC = () => {
     history.push('/' + page);
   }
 
+  const normalizeEdgeWeights = (edges: Edge[]) => {
+    let max = 0;
+    for (let edge of edges) {
+      if (edge.weight > max) {
+        max = edge.weight;
+      }
+    }
+
+    for (let edge of edges) {
+      edge.weight = edge.weight / max;
+      if (edge.weight * edgeFudge >= edgeThreshold) {
+        edge.weight = edgeThreshold;
+      } else {
+        edge.weight *= edgeFudge;
+      }
+    }
+  }
+
+  const normalizeNodeWeights = (nodes: N[]) => {
+    let max = 0;
+    for (let node of nodes) {
+      if (node.weight > max) {
+        max = node.weight;
+      }
+    }
+
+    for (let node of nodes) {
+      node.weight = node.weight / max;
+      node.weight *= fudge;
+    }
+  }
+
   const generateGraph = (graph: Graph) => {
     // Generate nodes
     let nodeData = [];
     for (let node of graph.nodes) {
+      console.log(node.weight);
       let newNode = {
         id: node.id.toString(),
         label: node.title,
+        size: node.weight
       };
       nodeData.push(newNode);
     }
@@ -58,60 +86,26 @@ const DisplayGraph: React.FC = () => {
         target: edge.to.id.toString(),
         id: edge.from.id.toString() + '-' + edge.to.id.toString(),
         label: edge.connection,
-        size: edge.size
+        size: edge.weight 
       };
       edgeData.push(newEdge);
     }
-
     setNodes(nodeData);
     setEdges(edgeData);
   }
 
-  // DEMO CODE TO SEE IF IT WORKS
+  const allGraphs = useSelector(selectGraphHistoryState);
+  const graph = allGraphs.find((graph: any) => graph.id == params.id);
+  if (!graph) {
+    setNewAlert(dispatch, { msg: "Graph " + params.id + " not found!", alertType: "error" });
+    history.push('');
+  }
+
+  // Generate graph once component is mounted
   useEffect(() => {
-    // Load graph data
-    const sampleNodes = [
-      new N("Node 1", "This is the first node", 1, 0, 0),
-      new N("Node 2", "This is the second node", 1, 0, 1),
-      new N("Node 3", "This is the third node", 1, 0, 2)
-    ];
-
-    const sampleEdges = [
-      new Edge("Connection 1", 1, sampleNodes[0], sampleNodes[1], 0, false, 3),
-      new Edge("Connection 2", 1, sampleNodes[1], sampleNodes[2], 0, false, 6),
-      new Edge("Connection 3", 1, sampleNodes[0], sampleNodes[2], 0, false, 1)
-    ];
-
-    const sampleGraph = new Graph(sampleNodes, sampleEdges);
-    generateGraph(sampleGraph);
-    /*setNodes(
-      [
-        {
-          id: '1',
-          label: '1',
-          sublabel: "xxx yyy"
-        },
-        {
-          id: '2',
-          label: '2'
-        }
-      ]);
-    
-    setEdges([
-      {
-        source: '1',
-        target: '2',
-        id: '1-2',
-        label: '1-2'
-      },
-      {
-        source: '2',
-        target: '1',
-        id: '2-1',
-        label: '2-1'
-      }
-    ]);*/
-      
+    normalizeEdgeWeights(graph.graph.edges);
+    normalizeNodeWeights(graph.graph.nodes);
+    generateGraph(graph.graph);      
   }, []);
 
   // Define graph theme

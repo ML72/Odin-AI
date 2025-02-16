@@ -1,11 +1,17 @@
+import { Graph, Edge, N } from '../graphs/graph';
 
 const INF = Number.MAX_SAFE_INTEGER;
+
+type AdjacencyList = {
+    [key: number]: Edge[];
+};
 
 let n: number;
 let capacity: number[][];
 let adj: number[][];
+let topFiveNodes = new Set<number>();
 
-function bfs(s: number, t: number, parent: number[]): number {
+function bfs(s: N, t: N, parent: number[]): number {
     parent.fill(-1);
     parent[s] = -2;
     
@@ -27,19 +33,19 @@ function bfs(s: number, t: number, parent: number[]): number {
     return 0;
 }
 
-function maxflow(s: number, t: number): number {
+function maxflow(s: N, t: N): number {
     let flow = 0;
-    const parent: number[] = new Array(n).fill(-1);
+    const parent: N[] = new Array(n);
     let new_flow: number;
 
     while ((new_flow = bfs(s, t, parent)) > 0) {
         flow += new_flow;
         let cur = t;
         
-        while (cur !== s) {
-            const prev = parent[cur];
-            capacity[prev][cur] -= new_flow;
-            capacity[cur][prev] += new_flow;
+        while (cur.id !== s.id) {
+            const prev = parent[cur.id];
+            capacity[prev.id][cur.id] -= new_flow;
+            capacity[cur.id][prev.id] += new_flow;
             cur = prev;
         }
     }
