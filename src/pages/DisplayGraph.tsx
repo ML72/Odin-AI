@@ -35,10 +35,11 @@ const DisplayGraph: React.FC = () => {
       let newNode = {
         id: node.id.toString(),
         label: node.title,
-        sublabel: node.body,
       };
       nodeData.push(newNode);
     }
+
+    console.log(nodeData);
 
     // Generate edges
     let edgeData = [];
@@ -53,6 +54,8 @@ const DisplayGraph: React.FC = () => {
       edgeData.push(newEdge);
     }
 
+    console.log(edgeData);
+
     setNodes(nodeData);
     setEdges(edgeData);
   }
@@ -61,9 +64,9 @@ const DisplayGraph: React.FC = () => {
   useEffect(() => {
     // Load graph data
     const sampleNodes = [
-      new N("Node 1", "This is the first node", 1),
-      new N("Node 2", "This is the second node", 1),
-      new N("Node 3", "This is the third node", 1)
+      new N("Node 1", "This is the first node", 1, 0),
+      new N("Node 2", "This is the second node", 1, 1),
+      new N("Node 3", "This is the third node", 1, 2)
     ];
 
     const sampleEdges = [
@@ -156,6 +159,7 @@ const DisplayGraph: React.FC = () => {
               height: '80%'
             }}>
               <GraphCanvas
+                edgeArrowPosition="none" 
                 nodes={nodes}
                 edges={edges}
                 theme={graphTheme}

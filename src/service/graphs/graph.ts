@@ -8,12 +8,12 @@ export class N {
     mastery: number;
     id: number;
 
-    constructor(title : string, body: string, weight: number) {
+    constructor(title: string, body: string, weight: number, id: number) {
         this.title = title;
         this.body = body;
         this.weight = weight;
         this.mastery = 0;
-        this.id = 0;
+        this.id = id;
     }
 }
 
