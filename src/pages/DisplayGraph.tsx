@@ -1,6 +1,6 @@
 import 'katex/dist/katex.min.css';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, Grid, Container, Typography, Box } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { GraphCanvas, lightTheme, nodeSizeProvider } from 'reagraph';
@@ -20,8 +20,8 @@ const DisplayGraph: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const params: any = useParams();
-  const fudge = 10;
-  const edgeFudge = 25;
+  const fudge = 1;
+  const edgeFudge = 1;
   const edgeThreshold = 37.5;
 
   // Utility functions
@@ -73,6 +73,7 @@ const DisplayGraph: React.FC = () => {
       let newNode = {
         id: node.id.toString(),
         label: node.title,
+        body: node.body,
         size: node.weight
       };
       nodeData.push(newNode);
@@ -92,6 +93,15 @@ const DisplayGraph: React.FC = () => {
     }
     setNodes(nodeData);
     setEdges(edgeData);
+  }
+
+  const onClickNode = (node: any) => {
+    setHeading(node.label);
+    setBody(node.body);
+    const graphRef = useRef<GraphCanvasRef | null>(null);
+    const fitView = () => {
+      graphRef.current?.fitNodesInView([node.id]);
+    };
   }
 
   const allGraphs = useSelector(selectGraphHistoryState);
@@ -164,6 +174,7 @@ const DisplayGraph: React.FC = () => {
                 nodes={nodes}
                 edges={edges}
                 theme={graphTheme}
+                onNodeClick={onClickNode}
               />
             </Box>
           </Grid>
@@ -177,6 +188,7 @@ const DisplayGraph: React.FC = () => {
                 {body}
               </Latex>
             </Typography>
+            {/* Display node details */}
 
             {/* Buttons */}
             <Grid container spacing={2} sx={{ mt: 4 }}>

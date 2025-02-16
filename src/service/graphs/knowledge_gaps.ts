@@ -61,7 +61,7 @@ export const knowledgeGaps = async (graph: Graph) => {
     
     return new Graph(node_map, personal_edges);
 }
-
+/*
 const g1_nodes  = [
     new N("Taxation without representation", "", 1, 0),
     new N("Sugar Act", "", 1, 1),
@@ -80,3 +80,4 @@ const graph = new Graph(
 
 const g3 = await knowledgeGaps(graph);
 g3.print();
+*/

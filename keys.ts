@@ -1,2 +1,2 @@
 // DO NOT GIT COMMIT CHANGES TO THIS FILE
-export const OPENAI_API_KEY = 'null';
+export const OPENAI_API_KEY = "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";

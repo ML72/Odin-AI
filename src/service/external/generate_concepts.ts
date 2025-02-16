@@ -58,7 +58,7 @@ export const generateEdges = async (
         store: true,
         messages: [
             {"role": "user", "content": 
-                `Generate a knowledge graph for the following markdown file by identifying the edges that connect the given list of nodes. 
+                `Generate a knowledge graph for the following markdown file by identifying the edges that connect the given list of nodes. Between each node, there should be at most one edge.
                     
                 ${node_list}
 
@@ -131,6 +131,7 @@ export async function graph_gen(markdown_text: string) {
     }
 
     const g: Graph = new Graph([...nodes.values()], edges);
+    g.calculateNodeCentrality();
     console.log(g);
 
     return g;
