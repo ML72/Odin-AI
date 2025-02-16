@@ -8,7 +8,7 @@ import { useHistory, useParams } from 'react-router';
 import Latex from 'react-latex-next';
 
 import CustomPage from '../components/CustomPage';
-import { setNewAlert } from '../service/alert';
+import { setNewAlert } from '../service/redux';
 import { Graph, N, Edge } from '../service/graphs/graph';
 
 const DisplayGraph: React.FC = () => {

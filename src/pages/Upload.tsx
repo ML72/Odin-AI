@@ -5,8 +5,7 @@ import { useHistory } from 'react-router';
 
 import CustomPage from '../components/CustomPage';
 import { CustomLinearProgress } from '../components/Progress';
-import { setNewAlert } from '../service/alert';
-import { addNewGraph } from '../service/graph';
+import { setNewAlert, addNewGraph } from '../service/redux';
 import { handleUpload } from '../service/upload';
 
 const Upload: React.FC = () => {
