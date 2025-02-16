@@ -71,7 +71,18 @@ export const handleUpload = async (selectedUserPngFile: any, selectedMp3File: an
     
     // Step 6: Retrieve stats
     let stats: any = {} // TODO later
-    const name = "Graph " + new Date().toISOString();
-
+    const userFileName = selectedUserPngFile ? selectedUserPngFile.name : null;
+    const audioFileName = selectedMp3File ? selectedMp3File.name : null;
+    let name; 
+    if (!userFileName) {
+        name = `${audioFileName}`; 
+    } else if (!audioFileName) {
+        name = `${userFileName}`; 
+    } else if (userFileName && audioFileName) {
+        name = `${userFileName} & ${audioFileName}`;
+    } else {
+        name = "Graph " + new Date().toISOString(); // Fallback name
+    }
+    
     return [name, finalGraph, stats];
 }
