@@ -1,29 +1,22 @@
-.App {
-  text-align: center;
+.rotating-svg {
+  animation: cosine-rotate 5s linear infinite; /* Adjust duration as needed */
+  transform-origin: 50% 50%; /* Set the center of rotation */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+@keyframes cosine-rotate {
+  0% {
+    transform: rotate(0deg);
   }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
+  25% {
+    transform: rotate(5deg); /* Adjust the maximum rotation angle */
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  75% {
+    transform: rotate(-5deg); /* Adjust the maximum rotation angle */
+  }
+  100% {
+    transform: rotate(0deg);
+  }
 }

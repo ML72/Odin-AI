@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.odinx.app', // Must be unique and should correspond to domain
-  appName: 'OdinX-AI',
+  appId: 'com.odin.app', // Must be unique and should correspond to domain
+  appName: 'Odin-AI',
   webDir: 'dist',
   bundledWebRuntime: false
 };

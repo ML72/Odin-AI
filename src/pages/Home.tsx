@@ -53,11 +53,11 @@ const Home: React.FC = () => {
           <Box
             component="img"
             sx={{
-              width: "70%"
+              width: "40%",
+              my: 3
             }}
-            src="img/undraw_analysis_1k4x.svg"
-            data-aos='fade-up'
-            data-aos-duration='500'
+            src="logo.svg"
+            className="rotating-svg"
           />
           <Typography
             sx={{ pt: 2 }}
@@ -135,7 +135,6 @@ const Home: React.FC = () => {
                       px: "20%"
                     }}
                     image={card.thumbnail}
-                    data-aos='fade-out' data-aos-duration='500' data-aos-delay="300"
                   />
                   <CardContent sx={{ flexGrow: 1 }}>
                     <Typography
